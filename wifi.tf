@@ -62,11 +62,11 @@ resource "routeros_wifi" "network_wifi" {
     frequency           = lookup(each.value, "frequency", null)
     reselect_interval   = each.value.reselect_interval
     secondary_frequency = lookup(each.value, "secondary_frequency", null)
-    skip_dfs_channels   = each.value.skip_dfs_channels
+    skip_dfs_channels   = "10min-cac"
     width               = lookup(each.value, "width", null)
   }
   configuration = {
-    country = each.value.country
+    country = "Switzerland"
     mode    = "ap"
     ssid    = each.value.ssid
   }
@@ -78,7 +78,7 @@ resource "routeros_wifi" "network_wifi" {
   mac_address = each.value.mac_address
   name        = each.value.name
   security = {
-    authentication_types = "wpa2-psk,wpa3-psk"
+    authentication_types = each.value.authentication_types
     connect_priority     = "0"
     ft                   = "true"
     ft_over_ds           = "true"
