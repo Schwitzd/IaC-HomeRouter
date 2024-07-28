@@ -1,26 +1,16 @@
-resource "routeros_interface_bridge_vlan" "myhome" {
-  vlan_ids = ["100"]
-  comment  = "myhome"
-  bridge   = "bridge"
-  tagged = [
-    "bridge",
-    "wifi-myhome"
-  ]
-}
+resource "routeros_interface_bridge_vlan" "network_vlans" {
+  for_each = local.networks
 
-resource "routeros_interface_bridge_vlan" "myiot" {
-  vlan_ids = ["200"]
-  comment  = "myiot"
-  bridge   = "bridge"
-  tagged = [
-    "bridge",
-    "wifi-myiot"
-  ]
+  vlan_ids = [each.value.vlan_id]
+  comment  = "vlan-${each.key}"
+  bridge   = routeros_interface_bridge.bridge.name
+  tagged   = each.value.interface_tagged
 }
 
 resource "routeros_interface_vlan" "vlans" {
   for_each  = local.networks_static
-  interface = "bridge"
+
+  interface = routeros_interface_bridge.bridge.name
   name      = "vlan-${each.value.name}"
   arp       = "enabled"
   vlan_id   = each.value.vlan_id

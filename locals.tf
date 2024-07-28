@@ -29,26 +29,30 @@ locals {
 
   networks = {
     myhome = {
-      address      = "${local.networks_static.myhome.gateway}/${local.networks_static.myhome.mask}"
-      gateway      = local.networks_static.myhome.gateway
-      interface    = "vlan-${local.networks_static.myhome.name}"
-      dhcp_address = "${local.networks_static.myhome.network}/${local.networks_static.myhome.mask}"
-      dhcp_pool    = "dhcp-${local.networks_static.myhome.name}"
-      dhcp_dns     = [local.networks_static.myhome.gateway]
-      dhcp_gateway = local.networks_static.myhome.gateway
-      pool_range   = ["192.168.12.10-192.168.12.254"]
-      network      = local.networks_static.myhome.network
+      address          = "${local.networks_static.myhome.gateway}/${local.networks_static.myhome.mask}"
+      gateway          = local.networks_static.myhome.gateway
+      interface        = "vlan-${local.networks_static.myhome.name}"
+      dhcp_address     = "${local.networks_static.myhome.network}/${local.networks_static.myhome.mask}"
+      dhcp_pool        = "dhcp-${local.networks_static.myhome.name}"
+      dhcp_dns         = [local.networks_static.myhome.gateway]
+      dhcp_gateway     = local.networks_static.myhome.gateway
+      pool_range       = ["192.168.12.10-192.168.12.254"]
+      network          = local.networks_static.myhome.network
+      vlan_id          = local.networks_static.myhome.vlan_id
+      interface_tagged = ["bridge", "wifi-myhome"]
     }
     myiot = {
-      address      = "${local.networks_static.myiot.gateway}/${local.networks_static.myiot.mask}"
-      gateway      = local.networks_static.myiot.gateway
-      interface    = "vlan-${local.networks_static.myiot.name}"
-      dhcp_address = "${local.networks_static.myiot.network}/${local.networks_static.myiot.mask}"
-      dhcp_pool    = "dhcp-${local.networks_static.myiot.name}"
-      dhcp_dns     = [local.networks_static.myiot.gateway]
-      dhcp_gateway = local.networks_static.myiot.gateway
-      pool_range   = ["192.168.13.10-192.168.13.20"]
-      network      = local.networks_static.myiot.network
+      address          = "${local.networks_static.myiot.gateway}/${local.networks_static.myiot.mask}"
+      gateway          = local.networks_static.myiot.gateway
+      interface        = "vlan-${local.networks_static.myiot.name}"
+      dhcp_address     = "${local.networks_static.myiot.network}/${local.networks_static.myiot.mask}"
+      dhcp_pool        = "dhcp-${local.networks_static.myiot.name}"
+      dhcp_dns         = [local.networks_static.myiot.gateway]
+      dhcp_gateway     = local.networks_static.myiot.gateway
+      pool_range       = ["192.168.13.10-192.168.13.20"]
+      vlan_id          = local.networks_static.myiot.vlan_id
+      network          = local.networks_static.myiot.network
+      interface_tagged = ["bridge", "wifi-myiot"]
     }
   }
 }
