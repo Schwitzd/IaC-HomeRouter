@@ -22,148 +22,31 @@ resource "routeros_interface_bridge" "bridge" {
   vlan_filtering      = true
 }
 
-## Bridge - Ports
-resource "routeros_interface_bridge_port" "ether1" {
-  auto_isolate         = false
-  bpdu_guard           = false
-  bridge               = "bridge"
-  broadcast_flood      = true
-  comment              = "defconf"
-  disabled             = false
-  edge                 = "auto"
-  fast_leave           = false
-  frame_types          = "admit-all"
-  horizon              = "none"
-  hw                   = true
-  ingress_filtering    = true
-  interface            = "ether1"
-  learn                = "auto"
-  multicast_router     = "temporary-query"
-  mvrp_applicant_state = "normal-participant"
-  mvrp_registrar_state = "normal"
-  point_to_point       = "auto"
-  #  priority                = "x80"
-  pvid                    = 1
-  restricted_role         = false
-  restricted_tcn          = false
-  tag_stacking            = false
-  trusted                 = false
-  unknown_multicast_flood = true
-  unknown_unicast_flood   = true
-}
+resource "routeros_interface_bridge_port" "bridge_ports" {
+  for_each = local.bridge_ports
 
-resource "routeros_interface_bridge_port" "ether2" {
   auto_isolate         = false
   bpdu_guard           = false
-  bridge               = "bridge"
+  bridge               = routeros_interface_bridge.bridge.name
   broadcast_flood      = true
-  comment              = "defconf"
+  comment              = null
   disabled             = false
   edge                 = "auto"
   fast_leave           = false
   frame_types          = "admit-all"
   horizon              = "none"
-  hw                   = true
   ingress_filtering    = true
-  interface            = "ether2"
+  interface            = each.value.interface
   learn                = "auto"
   multicast_router     = "temporary-query"
   mvrp_applicant_state = "normal-participant"
   mvrp_registrar_state = "normal"
   point_to_point       = "auto"
-  #  priority                = "x80"
-  pvid                    = 1
-  restricted_role         = false
-  restricted_tcn          = false
-  tag_stacking            = false
-  trusted                 = false
-  unknown_multicast_flood = true
-  unknown_unicast_flood   = true
-}
-
-resource "routeros_interface_bridge_port" "ether3" {
-  auto_isolate         = false
-  bpdu_guard           = false
-  bridge               = "bridge"
-  broadcast_flood      = true
-  comment              = "defconf"
-  disabled             = false
-  edge                 = "auto"
-  fast_leave           = false
-  frame_types          = "admit-all"
-  horizon              = "none"
-  hw                   = true
-  ingress_filtering    = true
-  interface            = "ether3"
-  learn                = "auto"
-  multicast_router     = "temporary-query"
-  mvrp_applicant_state = "normal-participant"
-  mvrp_registrar_state = "normal"
-  point_to_point       = "auto"
-  #  priority                = "x80"
-  pvid                    = 1
-  restricted_role         = false
-  restricted_tcn          = false
-  tag_stacking            = false
-  trusted                 = false
-  unknown_multicast_flood = true
-  unknown_unicast_flood   = true
-}
-
-resource "routeros_interface_bridge_port" "ether4" {
-  auto_isolate         = false
-  bpdu_guard           = false
-  bridge               = "bridge"
-  broadcast_flood      = true
-  comment              = "defconf"
-  disabled             = false
-  edge                 = "auto"
-  fast_leave           = false
-  frame_types          = "admit-all"
-  horizon              = "none"
-  hw                   = true
-  ingress_filtering    = true
-  interface            = "ether4"
-  learn                = "auto"
-  multicast_router     = "temporary-query"
-  mvrp_applicant_state = "normal-participant"
-  mvrp_registrar_state = "normal"
-  point_to_point       = "auto"
-  #  priority                = "x80"
-  pvid                    = 1
-  restricted_role         = false
-  restricted_tcn          = false
-  tag_stacking            = false
-  trusted                 = false
-  unknown_multicast_flood = true
-  unknown_unicast_flood   = true
-}
-
-resource "routeros_interface_bridge_port" "ether5" {
-  auto_isolate         = false
-  bpdu_guard           = false
-  bridge               = "bridge"
-  broadcast_flood      = true
-  comment              = "defconf"
-  disabled             = false
-  edge                 = "auto"
-  fast_leave           = false
-  frame_types          = "admit-all"
-  horizon              = "none"
-  hw                   = true
-  ingress_filtering    = true
-  interface            = "ether5"
-  learn                = "auto"
-  multicast_router     = "temporary-query"
-  mvrp_applicant_state = "normal-participant"
-  mvrp_registrar_state = "normal"
-  point_to_point       = "auto"
-  #  priority                = "x80"
-  pvid                    = 1
-  restricted_role         = false
-  restricted_tcn          = false
-  tag_stacking            = false
-  trusted                 = false
+  pvid                 = each.value.pvid
+  restricted_role      = false
+  restricted_tcn       = false
+  tag_stacking         = false
+  trusted              = false
   unknown_multicast_flood = true
   unknown_unicast_flood   = true
 }

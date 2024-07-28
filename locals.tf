@@ -71,4 +71,35 @@ locals {
       authentication_types = "wpa2-psk,wpa3-psk"
     }
   }
+
+  bridge_ports = {
+    ether1 = {
+      interface = "ether1"
+      pvid = 1
+    }
+    ether2 = {
+      interface = "ether2"
+      pvid = 1
+    }
+    ether3 = {
+      interface = "ether3"
+      pvid = 1
+    }
+    ether4 = {
+      interface = "ether4"
+      pvid = 1
+    }
+    ether5 = {
+      interface = "ether5"
+      pvid = 1
+    }
+    wifi1 = {
+      interface = local.wifi_settings.myhome.name
+      pvid = 100
+    }
+    wifi2 = {
+      interface = local.wifi_settings.myiot.name
+      pvid = 200
+    }
+  }
 }
