@@ -55,4 +55,33 @@ locals {
       interface_tagged = ["bridge", "wifi-myiot"]
     }
   }
+
+  wifi_settings = {
+    myhome = {
+      arp_timeout          = "auto"
+      band                 = "5ghz-ax"
+      frequency            = "5490-5710"
+      reselect_interval    = "1h"
+      secondary_frequency  = "disabled"
+      skip_dfs_channels    = "10min-cac"
+      width                = "20/40/80mhz"
+      country              = "Switzerland"
+      ssid                 = "MyHome_optout_nomap"
+      vlan_id              = local.networks_static.myhome.vlan_id
+      mac_address          = "78:9A:18:9F:3F:C4"
+      name                 = "wifi-myhome"
+      passphrase_key       = data.vault_generic_secret.wifi.data["myhome"]
+    }
+    myiot = {
+      arp_timeout          = "auto"
+      reselect_interval    = "1h"
+      skip_dfs_channels    = "10min-cac"
+      country              = "Switzerland"
+      ssid                 = "MyIoT_optout_nomap"
+      vlan_id              = local.networks_static.myiot.vlan_id
+      mac_address          = "78:9A:18:9F:3F:C5"
+      name                 = "wifi-myiot"
+      passphrase_key       = data.vault_generic_secret.wifi.data["myiot"]
+    }
+  }
 }

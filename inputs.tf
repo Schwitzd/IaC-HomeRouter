@@ -14,13 +14,3 @@ variable "vault_name" {
   type        = string
   sensitive   = true
 }
-
-variable "wifi_ssid_myhome" {
-  description = "SSID name for MyHome"
-  type        = string
-}
-
-variable "wifi_ssid_myiot" {
-  description = "SSID name for MyIoT"
-  type        = string
-}

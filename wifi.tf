@@ -53,60 +53,36 @@ resource "routeros_interface_bridge_port" "wifi2" {
 }
 
 # WiFi
-resource "routeros_wifi" "myhome" {
-  arp_timeout = "auto"
-  channel = {
-    band                = "5ghz-ax"
-    frequency           = "5490-5710"
-    reselect_interval   = "1h"
-    secondary_frequency = "disabled"
-    skip_dfs_channels   = "10min-cac"
-    width               = "20/40/80mhz"
-  }
-  configuration = {
-    country = "Switzerland"
-    mode    = "ap"
-    ssid    = var.wifi_ssid_myhome
-  }
-  datapath = {
-    vlan_id = local.networks_static.myhome.vlan_id
-  }
-  disabled    = false
-  l2mtu       = 1560
-  mac_address = "78:9A:18:9F:3F:C4"
-  name        = "wifi-myhome"
-  security = {
-    authentication_types = "wpa2-psk,wpa3-psk"
-    connect_priority     = "0"
-    ft                   = "true"
-    ft_over_ds           = "true"
-    passphrase           = data.vault_generic_secret.wifi.data["myhome"]
-    wps                  = "disable"
-  }
-}
+resource "routeros_wifi" "network_wifi" {
+  for_each = local.wifi_settings
 
-resource "routeros_wifi" "myiot" {
-  arp_timeout = "auto"
+  arp_timeout = each.value.arp_timeout
   channel = {
-    reselect_interval = "1h"
-    skip_dfs_channels = "10min-cac"
+    band                = lookup(each.value, "band", null)
+    frequency           = lookup(each.value, "frequency", null)
+    reselect_interval   = each.value.reselect_interval
+    secondary_frequency = lookup(each.value, "secondary_frequency", null)
+    skip_dfs_channels   = each.value.skip_dfs_channels
+    width               = lookup(each.value, "width", null)
   }
   configuration = {
-    mode = "ap"
-    ssid = var.wifi_ssid_myiot
+    country = each.value.country
+    mode    = "ap"
+    ssid    = each.value.ssid
   }
   datapath = {
-    vlan_id = local.networks_static.myiot.vlan_id
+    vlan_id = each.value.vlan_id
   }
   disabled    = false
   l2mtu       = 1560
-  mac_address = "78:9A:18:9F:3F:C5"
-  name        = "wifi-myiot"
+  mac_address = each.value.mac_address
+  name        = each.value.name
   security = {
     authentication_types = "wpa2-psk,wpa3-psk"
     connect_priority     = "0"
     ft                   = "true"
     ft_over_ds           = "true"
-    passphrase           = data.vault_generic_secret.wifi.data["myiot"]
+    passphrase           = each.value.passphrase_key
+    wps                  = "disable"
   }
 }
