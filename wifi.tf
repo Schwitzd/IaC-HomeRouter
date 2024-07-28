@@ -1,3 +1,33 @@
+# WiFi - Locals
+locals {
+  wifi_settings = {
+    myhome = {
+      arp_timeout          = "auto"
+      band                 = "5ghz-ax"
+      frequency            = "5490-5710"
+      reselect_interval    = "1h"
+      secondary_frequency  = "disabled"
+      width                = "20/40/80mhz"
+      ssid                 = "MyHome_optout_nomap"
+      vlan_id              = local.networks_static.myhome.vlan_id
+      mac_address          = "78:9A:18:9F:3F:C4"
+      name                 = "wifi-myhome"
+      passphrase_key       = data.vault_generic_secret.wifi.data["myhome"]
+      authentication_types = "wpa2-psk,wpa3-psk"
+    }
+    myiot = {
+      arp_timeout          = "auto"
+      reselect_interval    = "1h"
+      ssid                 = "MyIoT_optout_nomap"
+      vlan_id              = local.networks_static.myiot.vlan_id
+      mac_address          = "78:9A:18:9F:3F:C5"
+      name                 = "wifi-myiot"
+      passphrase_key       = data.vault_generic_secret.wifi.data["myiot"]
+      authentication_types = "wpa2-psk,wpa3-psk"
+    }
+  }
+}
+
 # WiFi
 resource "routeros_wifi" "network_wifi" {
   for_each = local.wifi_settings

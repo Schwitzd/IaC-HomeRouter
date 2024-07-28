@@ -1,3 +1,9 @@
+## Interfaces - Locals
+locals {
+  lan_interface_list = ["bridge", "vlan-myhome"]
+}
+
+# Interfaces
 resource "routeros_interface_list" "lan" {
   comment = "defconf"
   name    = "LAN"
