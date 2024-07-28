@@ -1,0 +1,11 @@
+vault_address      = "http://localhost:8200"
+vault_path         = "iac-homerouter"
+vault_type         = "kv-v2"
+vault_description  = "My home router IaC vault"
+auth_backend       = "token"
+entity_name        = "iac_homerouter-user"
+entity_description = "User needed to access the local vault of my homerouter"
+group_description  = "Group to manage access on my homerouter vault"
+group_type         = "internal"
+token_renewable    = true
+token_no_parent    = true
