@@ -1,6 +1,6 @@
 ## Interfaces - Locals
 locals {
-  lan_interface_list = ["bridge", "vlan-myhome"]
+  lan_interface_list = ["bridge", "vlan-myhome", "vlan-myiot"]
 }
 
 # Interfaces
