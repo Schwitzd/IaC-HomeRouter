@@ -1,6 +1,6 @@
 # Quad9 Root CA
 /*
-data "routeros_x509" "quad9-root" {
+data "routeros_x509" "quad9_root" {
   data = <<EOT
 -----BEGIN CERTIFICATE-----
 MIIDeTCCAv+gAwIBAgIQDCJUGB1t/fpm4mTjwXpIvDAKBggqhkjOPQQDAzBhMQsw
@@ -26,17 +26,17 @@ FEMbiAcHmsTBJS3vzvx7eJ9JlMhlrGSu7QrmeIg=
 EOT
 }
 
-resource "routeros_file" "quad9-root" {
-  name = "DigiCertGlobalG3TLSECCSHA3842020CA1-1.pem"
-  contents = data.routeros_x509.quad9-root.pem
+resource "routeros_file" "quad9_root" {
+  name = "DigiCertGlobalG3TLSECCSHA3842020CA1-1.crt.pem"
+  contents = data.routeros_x509.quad9_root.pem
 }
 
-resource "routeros_system_certificate" "quad9-root" {
-  name        = "DigiCertGlobalG3TLSECCSHA3842020CA1-1.pem"
-  common_name = data.routeros_x509.quad9-root.common_name
+resource "routeros_system_certificate" "quad9_root" {
+  name        = "Quad9-root"
+  common_name = data.routeros_x509.quad9_root.common_name
   import {
-    cert_file_name = routeros_file.quad9-root.name
+    cert_file_name = routeros_file.quad9_root.name
   }
-  depends_on = [routeros_file.quad9-root]
+  depends_on = [routeros_file.quad9_root]
 }
 */

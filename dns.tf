@@ -1,4 +1,3 @@
-/*
 resource "routeros_dns" "dns-server" {
   allow_remote_requests       = true
   cache_max_ttl               = "1w"
@@ -17,5 +16,6 @@ resource "routeros_dns" "dns-server" {
   ]
   use_doh_server  = "https://dns.quad9.net/dns-query"
   verify_doh_cert = true
+
+#  depends_on = [routeros_system_certificate.quad9_root]
 }
-*/
