@@ -19,3 +19,12 @@ resource "routeros_dns" "dns-server" {
 
   depends_on = [routeros_system_certificate.quad9_root]
 }
+
+resource "routeros_ip_dns_record" "dns_records" {
+  for_each = { for record in local.dns_records : record.hostname => record }
+
+  name = each.value.hostname
+  address = each.value.ip
+  type = each.value.type
+
+}

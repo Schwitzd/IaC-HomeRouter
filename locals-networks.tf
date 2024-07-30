@@ -18,6 +18,8 @@ locals {
     }
   }
 
+  dns_records = yamldecode(file("${path.module}/dns_records.yaml"))["dns_records"]
+
   networks = {
     for network_key, network_value in local.networks_static : network_key => {
       address          = "${network_value.gateway}/${network_value.mask}"

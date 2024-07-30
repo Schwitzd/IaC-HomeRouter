@@ -52,3 +52,6 @@ terraform.rc
 # Ignore all local history of files
 .history
 .ionide
+
+### RouterOS ###
+dns_records.yaml
