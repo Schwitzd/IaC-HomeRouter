@@ -16,7 +16,7 @@ I decided to configure my MikroTik router with Terraform for several reasons:
 
 5. **Configuration Tracking**: With Terraform, I can easily track changes to my router's configuration. In addition to reading changelogs, I can discover every single setting that is altered after an upgrade process, ensuring that I maintain full control and visibility over my router settings.
 
-6. **Creative Backup Solution**: Using Terraform provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation. 
+6. **Backup**: Using Terraform provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation. 
 
 ## Getting Started
 
