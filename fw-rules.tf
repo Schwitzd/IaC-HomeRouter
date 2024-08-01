@@ -69,6 +69,22 @@ locals {
       connection_state     = "new"
       in_interface_list    = "WAN"
     }
+    role11 = {
+      disabled           = true
+      action             = "accept"
+      chain              = "forward"
+      comment            = "Accept IGMP traffic between VLANs"
+      protocol           = "icmp"
+      in_interface_list  = "VLANs"
+      out_interface_list = "VLANs"
+    }
+    role12 = {
+      action             = "drop"
+      chain              = "forward"
+      comment            = "Block all traffics between VLANs"
+      in_interface_list  = "VLANs"
+      out_interface_list = "VLANs"
+    }
   }
 }
 
@@ -85,14 +101,16 @@ resource "routeros_ip_firewall_nat" "role1" {
 resource "routeros_ip_firewall_filter" "firewall_rules" {
   for_each = local.firewall_rules
 
+  disabled             = lookup(each.value, "disabled", null)
   action               = each.value.action
   chain                = each.value.chain
   comment              = each.value.comment
-  connection_state     = lookup(each.value, "connection_state", null)
   protocol             = lookup(each.value, "protocol", null)
+  connection_state     = lookup(each.value, "connection_state", null)
+  connection_nat_state = lookup(each.value, "connection_nat_state", null)
   dst_address          = lookup(each.value, "dst_address", null)
   in_interface_list    = lookup(each.value, "in_interface_list", null)
+  out_interface_list   = lookup(each.value, "out_interface_list", null)
   ipsec_policy         = lookup(each.value, "ipsec_policy", null)
   hw_offload           = lookup(each.value, "hw_offload", null)
-  connection_nat_state = lookup(each.value, "connection_nat_state", null)
 }
