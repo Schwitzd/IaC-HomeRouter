@@ -5,6 +5,7 @@
 # DoH
 # DNS entries
 # IPsec disable??
+# Lte
 
 
 
