@@ -5,7 +5,7 @@ resource "routeros_interface_bridge_vlan" "network_vlans" {
   vlan_ids = [each.value.vlan_id]
   comment  = "vlan-${each.key}"
   bridge   = routeros_interface_bridge.bridge.name
-  tagged   = each.value.interface_tagged
+  tagged   = each.value.vlan_interface
 }
 
 resource "routeros_interface_vlan" "vlans" {
