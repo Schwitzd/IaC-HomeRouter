@@ -1,3 +1,4 @@
+
 resource "routeros_interface_bridge_vlan" "network_vlans" {
   for_each = local.networks
 

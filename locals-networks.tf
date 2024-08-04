@@ -16,6 +16,16 @@ locals {
       pool_range = ["192.168.13.10-192.168.13.20"]
       vlan_id    = 200
     }
+/*
+    myserver = {
+      name       = "myserver"
+      network    = "192.168.14.0"
+      mask       = "26"
+      gateway    = "192.168.14.1"
+      pool_range = ["192.168.14.10-192.168.14.15"]
+      vlan_id    = 300
+    }
+*/
   }
 
   dns_records = yamldecode(file("${path.module}/dns_records.yaml"))["dns_records"]
