@@ -5,16 +5,16 @@ This repository contains the Terraform code I've developed to configure my Mikro
 ## Why Terraform
 
 I decided to configure my MikroTik router with Terraform for several reasons:
-   
+
 1. **Love for Automation**: As a DevOps guy, automation is at the heart of what I do. By automating the configuration of my router, I can ensure consistency, reduce manual errors and save time on repetitive tasks.
 
 2. **Infrastructure as Code (IaC)**: I believe in the principles of Infrastructure as Code. Managing my network infrastructure through code allows for better version control and repeatability.
 
-3. **Skill Improvement**: Working on this project is also a great way for me to improve my Terraform skills. It provides a practical, hands-on opportunity to explore advanced features. 
+3. **Skill Improvement**: Working on this project is also a great way for me to improve my Terraform skills. It provides a practical, hands-on opportunity to explore advanced features.
 
 4. **Configuration Tracking**: With Terraform, I can easily track changes to my router's configuration. In addition to reading changelogs, I can discover every single setting that is altered after an upgrade process, ensuring that I maintain full control and visibility over my router settings.
 
-5. **Backup**: Using Terraform provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation. 
+5. **Backup**: Using Terraform provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation.
 
 ## Getting Started
 
@@ -23,10 +23,32 @@ To get started with this repository, you'll need to have the following tools ins
 ### Requirements
 
 1. **Terraform**: Ensure you have Terraform installed. You can download it from the [official Terraform website](https://www.terraform.io/downloads.html).
-   
+
 2. **Vault**: You'll need HashiCorp Vault for managing secrets. Install it from the [official Vault website](https://www.vaultproject.io/downloads).
-   
-3. **terraform-provider-mikrotik**: This is the Terraform provider for MikroTik. You can find it on the [Terraform Registry](https://registry.terraform.io/providers/ddelnano/terraform-provider-mikrotik/latest).
+
+3. **terraform-routeros**: This is the Terraform provider for MikroTik. You can find it on the [Terraform Registry](https://registry.terraform.io/providers/terraform-routeros/routeros/).
+
+### Default Settings
+
+Restore the Router to the default settings but keep the **Default Cofiguration**.
+
+### Default Admin
+
+MikroTik uses **Admin** as a default admin user, is a good security practice to change replace it with something not easy to predict. Currently those steps are performed manually:
+
+1. Login to the router
+1. Create a new user in the **full** group:
+
+    ```sh
+    /user add name=<username> group=full
+    ```
+
+1. Logout and login with the new user
+1. Detele the default **admin** user:
+
+    ```sh
+    /user remove admin
+    ```
 
 ### Vault Integration
 
@@ -34,31 +56,39 @@ I use Vault to securely store sensitive information such as the password to conn
 
 I have built my own [terraform-modules](https://github.com/Schwitzd/terraform-modules) collection to streamline the deployment of a dedicated vault to store my router's secrets.
 
+I structure the Vault in two sections:
+
+1. **mikrotik**: username and password of the router
+1. **wifi**: my WiFi passwords, where the SSID is the key and the password is the value
+
 ### Installation
 
 1. Clone the repository:
+
     ```sh
     git clone https://github.com/Schwitzd/IaC-HomeRouter.git
     cd IaC-HomeRouter
     ```
 
-2. Initialize Terraform in your project directory:
+1. Initialize Terraform in your project directory:
+
     ```sh
     terraform init
     ```
 
-3. Create the file `dns_records.yaml`:
-```sh
-touch dns_records.yaml
-```
+1. Create the file `dns_records.yaml`:
 
-4. Create the Vault space:
-   ```sh
-    cd iac_vault
-    terraform init
-    terraform apply -var-file=variables.tfvars
+    ```sh
+    touch dns_records.yaml
     ```
 
+1. Create the Vault space:
+
+    ```sh
+      cd iac_vault
+      terraform init
+      terraform apply -var-file=variables.tfvars
+      ```
 
 ## Network Topology
 
@@ -84,7 +114,7 @@ dns_records:
 ```
 
 The `dns_records.yaml` file is excluded in the .gitignore to avoid exposing too much of my network (refer to the Risks section).
-This is the reason why is manually created after cloning the repository. 
+This is the reason why is manually created after cloning the repository.
 
 ### WiFi
 
