@@ -14,7 +14,9 @@ provider "vault" {
 }
 
 provider "routeros" {
-  hosturl  = "http://192.168.88.1:80"
-  username = data.vault_generic_secret.mikrotik.data["user"]
-  password = data.vault_generic_secret.mikrotik.data["password"]
+  hosturl  = "http://${var.router_ip}:80"
+  username = local.router_user
+  password = local.router_password
 }
+
+provider "local" {}

@@ -1,3 +1,8 @@
+variable "router_ip" {
+  description = "The Mikdrotik router IP addess"
+  type        = string
+}
+
 variable "vault_url" {
   description = "The Vault address"
   type        = string

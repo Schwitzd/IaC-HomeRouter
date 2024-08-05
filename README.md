@@ -127,6 +127,18 @@ The decision to use different frequencies is based on the typical use cases and 
 
 A small curiosity you will discover by reading the code is that the SSIDs are suffixed with `_optout_nomap`. You can understand why by reading about this decision [here](https://infosec.exchange/@Schwitzd/112519726734631681).
 
+## Containers
+
+I have enabled the container feature to take advantage of the ability to run containers inside my router, I will only run network/router related containers and not other types of home containers. As stated in the official RouterOS documentation this brings security risks, I suggest you to read the red made [disclaimer](https://help.mikrotik.com/docs/display/ROS/Container#Container-Disclaimer) and understand really carefully what you are doing.
+
+At the time of writing, I haven't found a Terraform resource to enable the container feature, as a manual interraction is also required to enable it, so run this command on the terminal and restart the router:
+
+```sh
+system/device-mode/update mode=home container=yes
+```
+
+The `container` package will be installed with Terraform, but an additional manual reboot is needed.
+
 ## Security
 
 As you may have guessed, I've decided to split my home network into different virtual LANs, primarily for security reasons, so that I can isolate devices I don't trust or can't protect as I'd like from devices I believe to be more trustworthy.
