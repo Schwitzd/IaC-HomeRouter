@@ -1,5 +1,21 @@
 ## Bridge - Locals
 locals {
+
+  bridges = {
+    bridge = {
+      name           = "bridge"
+      admin_mac      = "78:9A:18:9F:3F:BF"
+      comment        = "Bridge dedicated to generic traffic"
+      vlan_filtering = true
+    }
+    containers = {
+      name           = "containers"
+      admin_mac      = "42:E5:EA:3C:1A:F4"
+      comment        = "Bridge dedicated to containers traffic"
+      vlan_filtering = false
+    }
+  }
+
   bridge_ports = {
     ether1 = {
       interface = "ether1"
@@ -33,13 +49,16 @@ locals {
 }
 
 ## Bridge
-resource "routeros_interface_bridge" "bridge" {
-  admin_mac           = "78:9A:18:9F:3F:BF"
+resource "routeros_interface_bridge" "bridges" {
+  for_each = local.bridges
+
+  name                = each.value.name
+  admin_mac           = each.value.admin_mac
   ageing_time         = "5m"
   arp                 = "enabled"
   arp_timeout         = "auto"
   auto_mac            = false
-  comment             = "defconf"
+  comment             = each.value.comment
   dhcp_snooping       = false
   disabled            = false
   fast_forward        = true
@@ -48,35 +67,35 @@ resource "routeros_interface_bridge" "bridge" {
   max_message_age     = "20s"
   mtu                 = "auto"
   mvrp                = false
-  name                = "bridge"
   port_cost_mode      = "long"
   priority            = "0x8000"
   protocol_mode       = "rstp"
   transmit_hold_count = 6
-  vlan_filtering      = true
+  vlan_filtering      = each.value.vlan_filtering
 }
 
 resource "routeros_interface_bridge_port" "bridge_ports" {
   for_each = local.bridge_ports
 
-  auto_isolate            = false
-  bpdu_guard              = false
-  bridge                  = routeros_interface_bridge.bridge.name
-  broadcast_flood         = true
-  comment                 = null
-  disabled                = false
-  edge                    = "auto"
-  fast_leave              = false
-  frame_types             = "admit-all"
-  horizon                 = "none"
-  ingress_filtering       = true
-  interface               = each.value.interface
-  learn                   = "auto"
-  multicast_router        = "temporary-query"
-  mvrp_applicant_state    = "normal-participant"
-  mvrp_registrar_state    = "normal"
-  point_to_point          = "auto"
-  pvid                    = each.value.pvid
+  auto_isolate         = false
+  bpdu_guard           = false
+  bridge               = local.bridges.bridge.name
+  broadcast_flood      = true
+  comment              = null
+  disabled             = false
+  edge                 = "auto"
+  fast_leave           = false
+  frame_types          = "admit-all"
+  horizon              = "none"
+  ingress_filtering    = true
+  interface            = each.value.interface
+  learn                = "auto"
+  multicast_router     = "temporary-query"
+  mvrp_applicant_state = "normal-participant"
+  mvrp_registrar_state = "normal"
+  point_to_point       = "auto"
+  pvid                 = each.value.pvid
+  #  priority                = "x8000"
   restricted_role         = false
   restricted_tcn          = false
   tag_stacking            = false
