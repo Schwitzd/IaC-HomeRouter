@@ -134,7 +134,7 @@ I have enabled the container feature to take advantage of the ability to run con
 At the time of writing, I haven't found a Terraform resource to enable the container feature, as a manual interraction is also required to enable it, so run this command on the terminal and restart the router:
 
 ```sh
-system/device-mode/update mode=home container=yes
+system/device-mode/update mode=enterprise container=yes
 ```
 
 The `container` package will be installed with Terraform, but an additional manual reboot is needed.

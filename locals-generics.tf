@@ -39,6 +39,9 @@ locals {
   # Read DNS records from YAML file
   dns_records = yamldecode(file("${path.module}/dns_records.yaml"))["dns_records"]
 
+  # SSH Locals
+  router_ssh_key = "~/.ssh/${local.dns_records[0].hostname}_ed25519"
+
   # Dynamic network configurations
   networks = {
     for network_key, network_value in local.networks_static : network_key => {

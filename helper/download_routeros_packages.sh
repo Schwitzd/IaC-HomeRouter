@@ -42,7 +42,7 @@ fi
 # Extract matched files
 for FILE in $MATCHED_FILES; do
   echo "Extracting: ${FILE}"
-  unzip -j "${DOWNLOAD_PATH}" "${FILE}" -d "${EXTRACT_PATH}" -o
+  unzip -jo "${DOWNLOAD_PATH}" "${FILE}" -d "${EXTRACT_PATH}"
 
   if [ $? -ne 0 ]; then
     echo "Failed to extract: ${FILE}"
