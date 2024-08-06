@@ -22,7 +22,7 @@ resource "null_resource" "upload_container_npk" {
 
 resource "null_resource" "install_container_npk" {
   provisioner "local-exec" {
-      command = <<-EOT
+      command = <<EOT
         ssh -i ${local.router_ssh_key} ${local.router_user}@${var.router_ip} '/system reboot'; sleep 3
         until ssh -i ${local.router_ssh_key} -o ConnectTimeout=2 ${local.router_user}@${var.router_ip} ':put True' 2> /dev/null
         do
