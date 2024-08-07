@@ -25,6 +25,7 @@ FEMbiAcHmsTBJS3vzvx7eJ9JlMhlrGSu7QrmeIg=
 -----END CERTIFICATE-----
 EOT
 }
+
 resource "routeros_file" "quad9_root" {
   name = "DigiCertGlobalG3TLSECCSHA3842020CA1-1.crt.pem"
   contents = data.routeros_x509.quad9_root.pem
