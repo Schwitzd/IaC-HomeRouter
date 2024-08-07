@@ -17,7 +17,7 @@ resource "null_resource" "upload_container_npk" {
     command = "scp -i ${local.router_ssh_key} \"/tmp/routeros_packages/${local.container_npk_name}\" ${local.router_user}@${var.router_ip}:/${local.container_npk_name}"
   }
 
-  depends_on = [ null_resource.download_container_npk ]
+  depends_on = [ null_resource.download_container_npk, null_resource.import_publickey_admin ]
 }
 
 resource "null_resource" "install_container_npk" {
@@ -32,5 +32,5 @@ resource "null_resource" "install_container_npk" {
       EOT
   }
 
-  depends_on = [ null_resource.upload_container_npk ]
+  depends_on = [ null_resource.upload_container_npk, null_resource.import_publickey_admin ]
 }
