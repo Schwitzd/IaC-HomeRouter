@@ -1,6 +1,6 @@
 
 resource "routeros_interface_bridge_vlan" "network_vlans" {
-  for_each = local.networks
+  for_each = { for k, v in local.networks : k => v if v.vlan_id != null }
 
   vlan_ids = [each.value.vlan_id]
   comment  = "vlan-${each.key}"
@@ -9,7 +9,7 @@ resource "routeros_interface_bridge_vlan" "network_vlans" {
 }
 
 resource "routeros_interface_vlan" "vlans" {
-  for_each  = local.networks_static
+  for_each = { for k, v in local.networks_static : k => v if v.vlan_id != null }
 
   interface = local.bridges.bridge.name
   name      = "vlan-${each.value.name}"

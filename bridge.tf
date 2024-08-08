@@ -18,32 +18,44 @@ locals {
 
   bridge_ports = {
     ether1 = {
+      bridge    = local.bridges.bridge.name
       interface = "ether1"
       pvid      = 1
     }
     ether2 = {
+      bridge    = local.bridges.bridge.name
       interface = "ether2"
       pvid      = 1
     }
     ether3 = {
+      bridge    = local.bridges.bridge.name
       interface = "ether3"
       pvid      = 1
     }
     ether4 = {
+      bridge    = local.bridges.bridge.name
       interface = "ether4"
       pvid      = 1
     }
     ether5 = {
+      bridge    = local.bridges.bridge.name
       interface = "ether5"
       pvid      = 1
     }
     wifi1 = {
+      bridge    = local.bridges.bridge.name
       interface = local.wifi_settings.myhome.name
       pvid      = 100
     }
     wifi2 = {
+      bridge    = local.bridges.bridge.name
       interface = local.wifi_settings.myiot.name
       pvid      = 200
+    }
+    veth1 = {
+      bridge    = local.bridges.containers.name
+      interface = "veth-mycontainers"
+      pvid      = 1
     }
   }
 }
@@ -79,7 +91,7 @@ resource "routeros_interface_bridge_port" "bridge_ports" {
 
   auto_isolate         = false
   bpdu_guard           = false
-  bridge               = local.bridges.bridge.name
+  bridge               = each.value.bridge
   broadcast_flood      = true
   comment              = null
   disabled             = false

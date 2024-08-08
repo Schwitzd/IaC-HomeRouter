@@ -1,6 +1,6 @@
 ## DHCP
 resource "routeros_ip_dhcp_server" "dhcp_servers" {
-  for_each    = local.networks
+  for_each = { for k, v in local.networks : k => v if v.dhcp_enabled }
 
   address_pool = each.value.dhcp_pool
   interface    = each.value.interface
@@ -12,7 +12,7 @@ resource "routeros_ip_dhcp_server" "dhcp_servers" {
 }
 ## DHCP - Networks
 resource "routeros_ip_dhcp_server_network" "dhcp_server_networks" {
-  for_each   = local.networks
+  for_each = { for k, v in local.networks : k => v if v.dhcp_enabled }
 
   address    = each.value.dhcp_address
   comment    = each.value.dhcp_pool
@@ -22,7 +22,7 @@ resource "routeros_ip_dhcp_server_network" "dhcp_server_networks" {
 
 ## IP Pool
 resource "routeros_ip_pool" "dhcp_pools" {
-  for_each = local.networks
+  for_each = { for k, v in local.networks : k => v if v.dhcp_enabled }
 
   name     = each.value.dhcp_pool
   ranges   = each.value.pool_range
