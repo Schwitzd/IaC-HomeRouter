@@ -19,3 +19,8 @@ variable "vault_name" {
   type        = string
   sensitive   = true
 }
+
+variable "usb_disk" {
+  description = "UBS disk path"
+  type        = string
+}

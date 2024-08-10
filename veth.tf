@@ -11,7 +11,7 @@ locals {
 }
 
 # vETH
-resource "routeros_interface_veth" "containers" {
+resource "routeros_interface_veth" "veth" {
   for_each = local.veth_interfaces
 
   name    = each.value.name

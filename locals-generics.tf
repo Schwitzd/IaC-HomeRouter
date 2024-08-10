@@ -1,7 +1,5 @@
 locals {
   # Define system information
-  router_user         = data.vault_generic_secret.mikrotik.data["user"]
-  router_password     = data.vault_generic_secret.mikrotik.data["password"]
   system_version      = replace(data.routeros_system_resource.data.version, " (stable)", "")
   system_architecture = data.routeros_system_resource.data.architecture_name
 

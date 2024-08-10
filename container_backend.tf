@@ -1,6 +1,7 @@
 # Containers - Locals
 locals {
   container_npk_name = "container-${local.system_version}-${local.system_architecture}.npk"
+  containers_path = "${var.usb_disk}/containers"
 }
 
 # Containers - Install package
@@ -34,4 +35,11 @@ resource "null_resource" "install_container_npk" {
   }
 
   depends_on = [ null_resource.upload_container_npk, null_resource.import_publickey_admin ]
+}
+
+# Containers - config
+resource "routeros_container_config" "config" {
+  registry_url = "https://registry-1.docker.io"
+  ram_high     = "20"
+  tmpdir       = "/usb1/containers/tmp"
 }
