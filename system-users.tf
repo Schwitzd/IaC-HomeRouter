@@ -8,7 +8,7 @@ locals {
   user_groups = {
     lego = {
       name   = "lego"
-      policy = ["!api", "!ftp", "!local", "!password", "!policy", "read", "!reboot", "!rest-api", "!romon", "!sensitive", "!sniff", "ssh", "!telnet", "!test", "!web", "!winbox", "write"]
+      policy = ["!api", "ftp", "!local", "!password", "!policy", "read", "!reboot", "!rest-api", "!romon", "!sensitive", "!sniff", "ssh", "!telnet", "!test", "!web", "!winbox", "write"]
     }
   }
 }
