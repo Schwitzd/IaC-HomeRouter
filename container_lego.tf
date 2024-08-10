@@ -41,6 +41,7 @@ resource "routeros_container" "lego" {
   remote_image  = "schwitzd/routeros-letsencrypt"
   interface     = local.veth_interfaces.mycontainers.name
   envlist       = "lego"
+  dns           = local.networks_static.mycontainers.dns_server
   logging       = true
   mounts        = [for mount in routeros_container_mounts.lego_mounts : mount.name]
   root_dir      = "${local.containers_path}/lego/root"

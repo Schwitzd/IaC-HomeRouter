@@ -44,6 +44,7 @@ locals {
       mask           = "26"
       gateway        = "192.168.101.1"
       dhcp_enabled   = false
+      dns_server     = "192.168.101.1"
       addr_interface = local.bridges.containers.name
       vlan_id        = null
     }
