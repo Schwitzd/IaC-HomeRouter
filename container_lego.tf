@@ -1,4 +1,4 @@
-# Container Lego - Locals
+# Container lego - Locals
 
 locals {
   lego_envs = { for k, v in data.vault_generic_secret.container_lego_envs.data : k => {
@@ -18,7 +18,7 @@ locals {
   }
 }
 
-# Container Lego - Envs
+# Container lego - Envs
 resource "routeros_container_envs" "lego_envs" {
   for_each = nonsensitive(local.lego_envs)
 
@@ -27,7 +27,7 @@ resource "routeros_container_envs" "lego_envs" {
   value = each.value.value
 }
 
-# Container Lego - Mounts
+# Container lego - Mounts
 resource "routeros_container_mounts" "lego_mounts" {
   for_each = local.lego_mounts
 
@@ -36,7 +36,7 @@ resource "routeros_container_mounts" "lego_mounts" {
   dst  = each.value.dst
 }
 
-# Container Lego - Image
+# Container lego - Image
 resource "routeros_container" "lego" {
   remote_image  = "schwitzd/routeros-letsencrypt"
   interface     = local.veth_interfaces.mycontainers.name
