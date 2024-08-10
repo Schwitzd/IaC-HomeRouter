@@ -1,3 +1,4 @@
+# DNS - Server
 resource "routeros_dns" "dns-server" {
   allow_remote_requests       = true
   cache_max_ttl               = "1w"
@@ -20,6 +21,7 @@ resource "routeros_dns" "dns-server" {
   depends_on = [routeros_system_certificate.quad9_root]
 }
 
+# DNS - Static
 resource "routeros_ip_dns_record" "dns_records" {
   for_each = { for record in local.dns_records : record.hostname => record }
 
