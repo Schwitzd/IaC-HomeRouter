@@ -1,5 +1,4 @@
 # Locals
-
 locals {
   router_user     = data.vault_generic_secret.mikrotik.data["user"]
   router_password = data.vault_generic_secret.mikrotik.data["password"]
