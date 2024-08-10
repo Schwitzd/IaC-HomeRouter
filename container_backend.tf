@@ -40,6 +40,6 @@ resource "null_resource" "install_container_npk" {
 # Containers - config
 resource "routeros_container_config" "config" {
   registry_url = "https://registry-1.docker.io"
-  ram_high     = "256M"
+  ram_high     = "268435456"
   tmpdir       = "/usb1/containers/tmp"
 }

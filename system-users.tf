@@ -24,7 +24,7 @@ resource "routeros_system_user_group" "user_groups" {
 # Users
 resource "routeros_system_user" "lego" {
   name     = local.lego_user
-  address  = "${local.networks_static.mycontainers.network}/${local.networks_static.mycontainers.mask}"
+  address  = "${local.networks_static.mycontainer.network}/${local.networks_static.mycontainer.mask}"
   group    = routeros_system_user_group.user_groups["lego"].name
   password = local.lego_password
   comment  = "Used to rotate letsencrypt certificate"

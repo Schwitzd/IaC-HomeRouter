@@ -1,10 +1,10 @@
 # Locals - vETH
 locals {
   veth_interfaces = {
-    mycontainers = {
-      name    = "veth-${local.networks_static.mycontainers.name}"
-      address = "192.168.101.2/${local.networks_static.mycontainers.mask}"
-      gateway = local.networks_static.mycontainers.gateway
+    mycontainer = {
+      name    = "veth-${local.networks_static.mycontainer.name}"
+      address = "192.168.101.2/${local.networks_static.mycontainer.mask}"
+      gateway = local.networks_static.mycontainer.gateway
       comment = "Virtual interface for containers"
     }
   }

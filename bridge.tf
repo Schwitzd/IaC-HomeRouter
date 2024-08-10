@@ -8,8 +8,8 @@ locals {
       comment        = "Bridge dedicated to generic traffic"
       vlan_filtering = true
     }
-    containers = {
-      name           = "containers"
+    container = {
+      name           = "container"
       admin_mac      = "42:E5:EA:3C:1A:F4"
       comment        = "Bridge dedicated to containers traffic"
       vlan_filtering = false
@@ -53,8 +53,8 @@ locals {
       pvid      = 200
     }
     veth1 = {
-      bridge    = local.bridges.containers.name
-      interface = "veth-mycontainers"
+      bridge    = local.bridges.container.name
+      interface = local.veth_interfaces.mycontainer.name
       pvid      = 1
     }
   }

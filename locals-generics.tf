@@ -12,6 +12,7 @@ locals {
       gateway         = "192.168.12.1"
       dhcp_enabled    = true
       pool_range      = ["192.168.12.10-192.168.12.254"]
+      bridge          = local.bridges.bridge.name
       addr_interface  = "vlan-myhome"
       vlan_id         = 100
       vlan_interfaces = ["wifi-myhome"]
@@ -23,6 +24,7 @@ locals {
       gateway         = "192.168.13.1"
       dhcp_enabled    = true
       pool_range      = ["192.168.13.10-192.168.13.20"]
+      bridge          = local.bridges.bridge.name
       addr_interface  = "vlan-myiot"
       vlan_id         = 200
       vlan_interfaces = ["wifi-myiot"]
@@ -34,18 +36,20 @@ locals {
       gateway        = "192.168.14.1"
       dhcp_enabled   = true
       pool_range     = ["192.168.14.10-192.168.14.15"]
+      bridge         = local.bridges.bridge.name
       addr_interface = "vlan-myserver"
       vlan_id        = 300
       #      vlan_interfaces  = null
     }
-    mycontainers = {
-      name           = "mycontainers"
+    mycontainer = {
+      name           = "mycontainer"
       network        = "192.168.101.0"
       mask           = "26"
       gateway        = "192.168.101.1"
       dhcp_enabled   = false
       dns_server     = "192.168.101.1"
-      addr_interface = local.bridges.containers.name
+      bridge         = local.bridges.container.name
+      addr_interface = local.bridges.container.name
       vlan_id        = null
     }
   }
@@ -60,6 +64,7 @@ locals {
   networks = {
     for network_key, network_value in local.networks_static : network_key => {
       address        = "${network_value.gateway}/${network_value.mask}"
+      bridge         = network_value.bridge
       gateway        = network_value.gateway
       interface      = network_value.addr_interface
       dhcp_enabled   = network_value.dhcp_enabled
@@ -70,7 +75,7 @@ locals {
       pool_range     = lookup(network_value, "pool_range", [])
       network        = network_value.network
       vlan_id        = lookup(network_value, "vlan_id", null)
-      vlan_interface = concat(["bridge"], lookup(network_value, "vlan_interfaces", []))
+      vlan_interface = concat([network_value.bridge], lookup(network_value, "vlan_interfaces", []))
     }
   }
 }
