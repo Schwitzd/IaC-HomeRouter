@@ -15,7 +15,7 @@ resource "routeros_file" "ssh_publickey_admin" {
 resource "null_resource" "import_publickey_admin" {
   provisioner "local-exec" {
     command = <<EOT
-        ssh ${local.router_user}@${var.router_ip} '/user/ssh-keys import user=${local.router_user} public-key-file=${routeros_file.ssh_publickey_admin.name} key-owner=${local.router_user}'
+        ssh ${local.router_user}@${local.router_hostname} '/user/ssh-keys import user=${local.router_user} public-key-file=${routeros_file.ssh_publickey_admin.name} key-owner=${local.router_user}'
       EOT
   }
 
@@ -44,7 +44,7 @@ resource "routeros_file" "ssh_privatekey_lego" {
 resource "null_resource" "import_publickey_lego" {
   provisioner "local-exec" {
     command = <<EOT
-        ssh ${local.router_user}@${var.router_ip} '/user/ssh-keys import user=${local.lego_user} public-key-file=${routeros_file.ssh_publickey_lego.name} key-owner=${local.lego_user}'
+        ssh ${local.router_user}@${local.router_hostname} '/user/ssh-keys import user=${local.lego_user} public-key-file=${routeros_file.ssh_publickey_lego.name} key-owner=${local.lego_user}'
       EOT
   }
 

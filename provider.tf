@@ -14,9 +14,10 @@ provider "vault" {
 }
 
 provider "routeros" {
-  hosturl  = "http://${var.router_ip}:80"
+  hosturl  = "${var.http_schema}://${local.router_hostname}"
   username = local.router_user
   password = local.router_password
+  insecure = var.http_schema == "https" ? false : true
 }
 
 provider "local" {}

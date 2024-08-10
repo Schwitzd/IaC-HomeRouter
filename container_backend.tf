@@ -16,7 +16,7 @@ resource "null_resource" "download_container_npk" {
 
 resource "null_resource" "upload_container_npk" {
   provisioner "local-exec" {
-    command = "scp -i ${local.router_ssh_key} \"/tmp/routeros_packages/${local.container_npk_name}\" ${local.router_user}@${var.router_ip}:/${local.container_npk_name}"
+    command = "scp -i ${local.router_ssh_key} \"/tmp/routeros_packages/${local.container_npk_name}\" ${local.router_user}@${local.router_hostname}:/${local.container_npk_name}"
   }
 
   depends_on = [ null_resource.download_container_npk, null_resource.import_publickey_admin ]
@@ -25,8 +25,8 @@ resource "null_resource" "upload_container_npk" {
 resource "null_resource" "install_container_npk" {
   provisioner "local-exec" {
       command = <<EOT
-        ssh -i ${local.router_ssh_key} ${local.router_user}@${var.router_ip} '/system reboot'; sleep 3
-        until ssh -i ${local.router_ssh_key} -o ConnectTimeout=2 ${local.router_user}@${var.router_ip} ':put True' 2> /dev/null
+        ssh -i ${local.router_ssh_key} ${local.router_user}@${local.router_hostname} '/system reboot'; sleep 3
+        until ssh -i ${local.router_ssh_key} -o ConnectTimeout=2 ${local.router_user}@${local.router_hostname} ':put True' 2> /dev/null
         do
           echo "Waiting for router to reboot and become available..."
           sleep 10

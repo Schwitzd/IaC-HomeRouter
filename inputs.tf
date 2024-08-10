@@ -1,5 +1,5 @@
-variable "router_ip" {
-  description = "The Mikdrotik router IP addess"
+variable "http_schema" {
+  description = "The url connection schema"
   type        = string
 }
 
