@@ -2,19 +2,21 @@
 
 This repository contains the Terraform code I've developed to configure my MikroTik router. The purpose of this repository is to provide a structured and repeatable way to manage and automate the setup of MikroTik routers using Infrastructure as Code (IaC) principles.
 
+My initial idea was to use this project as a backup, start with a new router and run `terraform apply`, the router would magically be ready with everything I needed. But in the end I realised that this was not feasible due to the complexity of the configuration, which required intermediate steps in Terraform and could not be applied in one step.
+
 ## Why Terraform
 
 I decided to configure my MikroTik router with Terraform for several reasons:
 
 1. **Love for Automation**: As a DevOps guy, automation is at the heart of what I do. By automating the configuration of my router, I can ensure consistency, reduce manual errors and save time on repetitive tasks.
 
-2. **Infrastructure as Code (IaC)**: I believe in the principles of Infrastructure as Code. Managing my network infrastructure through code allows for better version control and repeatability.
+1. **Infrastructure as Code (IaC)**: I believe in the principles of Infrastructure as Code. Managing my network infrastructure through code allows for better version control and repeatability.
 
-3. **Skill Improvement**: Working on this project is also a great way for me to improve my Terraform skills. It provides a practical, hands-on opportunity to explore advanced features.
+1. **Skill Improvement**: Working on this project is also a great way for me to improve my Terraform skills. It provides a practical, hands-on opportunity to explore advanced features.
 
-4. **Configuration Tracking**: With Terraform, I can easily track changes to my router's configuration. In addition to reading changelogs, I can discover every single setting that is altered after an upgrade process, ensuring that I maintain full control and visibility over my router settings.
+1. **Configuration Tracking**: With Terraform, I can easily track changes to my router's configuration. In addition to reading changelogs, I can discover every single setting that is altered after an upgrade process, ensuring that I maintain full control and visibility over my router settings.
 
-5. **Backup**: Using Terraform provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation.
+1. ~~**Backup**: Using Terraform~provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation.~~
 
 ## Getting Started
 
@@ -56,12 +58,13 @@ I use Vault to securely store sensitive information such as the password to conn
 
 I have built my own [terraform-modules](https://github.com/Schwitzd/terraform-modules) collection to streamline the deployment of a dedicated vault to store my router's secrets.
 
-I structure the Vault in two sections:
+I structure the Vault different sections:
 
 1. **mikrotik**: username and password of the router
 1. **wifi**: my WiFi passwords, where the SSID is the key and the password is the value
+1. **container_lego_envs**: environment variables for LEGO container
 
-### Installation
+### Terraform Environement
 
 1. Clone the repository:
 
@@ -95,9 +98,10 @@ I structure the Vault in two sections:
 My home network is divided into four VLANs:
 
 1. **VLAN 100: Home** - For all general household devices.
-2. **VLAN 200: IoT** - Dedicated to Internet of Things devices like TV and smart plugs.
-3. **VLAN 300: Server** - For home servers.
-4. **VLAN 400: Lab** - Used inside my lab for experiment technologies.
+1. **VLAN 200: IoT** - Dedicated to Internet of Things devices like TV and smart plugs.
+1. **VLAN 300: Server** - For home servers.
+1. **VLAN 400: Lab** - Used inside my lab for experiment technologies.
+1. **VLAN 999: Management** - Router management vlan.
 
 ### DNS
 
@@ -131,7 +135,7 @@ A small curiosity you will discover by reading the code is that the SSIDs are su
 
 I have enabled the container feature to take advantage of the ability to run containers inside my router, I will only run network/router related containers and not other types of home containers. As stated in the official RouterOS documentation this brings security risks, I suggest you to read the red made [disclaimer](https://help.mikrotik.com/docs/display/ROS/Container#Container-Disclaimer) and understand really carefully what you are doing.
 
-At the time of writing, I haven't found a Terraform resource to enable the container feature, as a manual interraction is also required to enable it, so run this command on the terminal and restart the router:
+MikroTik has implemented a security mechanism that prevents the container feature from being enabled remotely or with automation, requiring you to press a physical button to acknowledge, so run this command on the terminal and restart the router:
 
 ```sh
 system/device-mode/update mode=enterprise container=yes
@@ -143,9 +147,25 @@ The `container` package will be installed with Terraform, but an additional manu
 
 As you may have guessed, I've decided to split my home network into different virtual LANs, primarily for security reasons, so that I can isolate devices I don't trust or can't protect as I'd like from devices I believe to be more trustworthy.
 
+### HTTPS admin page
+
+To enable the router interface in HTTPS, you can follow the video on the Mikrotik [official documentation](https://help.mikrotik.com/docs/display/ROS/Certificates#Certificates-Let'sEncryptcertificates). But be aware that the router's management interface is exposed to the Internet (even if it's only accessible from Let's Encrypt IPs).
+
+To avoid this, I took advantage of the domain I use for my [website](https://schwitzd.me) and leveraged the container functionality:
+
+1. Create a static DNS entry on RouterOS to `router.domain.tld`
+1. Enable the container feature
+1. Use [routeros-letsencrypt-docker](https://github.com/Schwitzd/routeros-letsencrypt-docker) to obtain a Let's Encrypt certificate using [DNS challenge](https://letsencrypt.org/docs/challenge-types/).
+
+For a reason I have not yet understood Alpine Linux is not able to resolve `router.domain.tld` even having set the router as DNS resolver. So in the `ROUTEROS_HOST` environment variable I used the IP.
+
 ### Firewall
 
 I'm leveraging the built-in MikroTik firewall to protect each VLAN. By default, there is a rule that blocks all traffic between VLANs. Only explicitly allowed traffic is permitted to pass through the firewall.
+
+### Backup
+
+offline backup TBD
 
 ## Risks
 
