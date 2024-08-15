@@ -54,4 +54,4 @@ terraform.rc
 .ionide
 
 ### RouterOS ###
-dns_records.yaml
+_static_hosts.yaml
