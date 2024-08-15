@@ -82,7 +82,7 @@ locals {
       action        = "accept"
       chain         = "forward"
       comment       = "Allow SSH traffic from myhome"
-      protocol = "tcp"
+      protocol      = "tcp"
       dst_port      = "22"
       in_interface  = routeros_interface_vlan.vlans["myhome"].name
       out_interface = routeros_interface_vlan.vlans["myserver"].name
