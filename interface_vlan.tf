@@ -1,4 +1,4 @@
-
+# Bridge VLAN
 resource "routeros_interface_bridge_vlan" "network_vlans" {
   for_each = { for k, v in local.networks : k => v if v.vlan_id != null }
 
@@ -8,6 +8,7 @@ resource "routeros_interface_bridge_vlan" "network_vlans" {
   tagged   = each.value.vlan_interface
 }
 
+# Interface VLAN
 resource "routeros_interface_vlan" "vlans" {
   for_each = { for k, v in local.networks_static : k => v if v.vlan_id != null }
 

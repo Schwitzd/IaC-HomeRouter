@@ -1,5 +1,4 @@
 # Quad9 Root CA
-
 data "routeros_x509" "quad9_root" {
   data = <<EOT
 -----BEGIN CERTIFICATE-----

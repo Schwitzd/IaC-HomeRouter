@@ -1,3 +1,4 @@
+# Scheduler - Locals
 locals {
   schedules = {
     update_container_image = {
@@ -10,6 +11,7 @@ locals {
   }
 }
 
+# Scheduler
 resource "routeros_system_scheduler" "schedules" {
   for_each = local.schedules
 

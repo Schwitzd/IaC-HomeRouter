@@ -1,4 +1,4 @@
-# Script - Locals
+# Scripts - Locals
 locals {
   scripts = {
     update_container_image = {
@@ -10,7 +10,7 @@ locals {
   }
 }
 
-# Script - Raw code
+# Scripts- Raw code
 data "http" "scripts" {
   for_each = local.scripts
 

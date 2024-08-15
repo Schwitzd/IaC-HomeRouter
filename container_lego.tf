@@ -1,5 +1,4 @@
 # Container lego - Locals
-
 locals {
   lego_envs = { for k, v in data.vault_generic_secret.container_lego_envs.data : k => {
     key   = k

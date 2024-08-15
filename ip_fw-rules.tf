@@ -1,3 +1,4 @@
+# Firewall Rules - Locals
 locals {
   firewall_rules = {
     role0 = {

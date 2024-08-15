@@ -185,3 +185,9 @@ By publishing this repository, I'm accepting the risk of exposing my home networ
 ## Why Share?
 
 I decided to share this repository because I believe that sharing knowledge is incredibly important. By open-sourcing my configuration, I hope to help others in the community who want to use Terraform to automate their MikroTik router setup and apply good security practices to their home network. Collaborating and learning from each other is a key aspect of the tech community.
+
+## To Do
+
+* Disable IPSec
+* Remove IPSec fw rules
+* WiFi force PMF
