@@ -55,7 +55,7 @@ locals {
     }
   }
 
-  # Read DNS records from YAML file
+  # Read DNS & DHCP records from YAML file
   static_hosts = yamldecode(file("${path.module}/_static_hosts.yaml"))["static_hosts"]
 
   # SSH Locals

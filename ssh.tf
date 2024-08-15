@@ -3,7 +3,7 @@ module "sshkey_admin" {
   source = "git::https://github.com/Schwitzd/terraform-modules.git//ssh-keygen"
 
   algorithm     = "ED25519"
-  keys_name     = local.dns_records[0].hostname
+  keys_name     = local.static_hosts[0].hostname
   write_to_file = true
 }
 
