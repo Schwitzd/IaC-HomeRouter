@@ -56,7 +56,7 @@ locals {
   }
 
   # Read DNS records from YAML file
-  dns_records = yamldecode(file("${path.module}/dns_records.yaml"))["dns_records"]
+  static_hosts = yamldecode(file("${path.module}/_static_hosts.yaml"))["static_hosts"]
 
   # SSH Locals
   router_ssh_key = module.sshkey_admin.public_key_filename
@@ -69,6 +69,7 @@ locals {
       gateway        = network_value.gateway
       interface      = network_value.addr_interface
       dhcp_enabled   = network_value.dhcp_enabled
+      dhcp_server    = "dhcp-server-${network_value.name}"
       dhcp_address   = "${network_value.network}/${network_value.mask}"
       dhcp_pool      = "dhcp-${network_value.name}"
       dhcp_dns       = [network_value.gateway]
