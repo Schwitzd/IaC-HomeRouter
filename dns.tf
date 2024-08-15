@@ -23,7 +23,7 @@ resource "routeros_dns" "dns-server" {
 
 # DNS - Static
 resource "routeros_ip_dns_record" "dns_records" {
-  for_each = { for record in local.dns_records : record.hostname => record }
+  for_each = { for record in local.static_hosts : record.hostname => record }
 
   name    = each.value.hostname
   address = lookup(each.value, "ip", null)
