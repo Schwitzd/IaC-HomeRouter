@@ -103,22 +103,22 @@ My home network is divided into four VLANs:
 1. **VLAN 400: Lab** - Used inside my lab for experiment technologies.
 1. **VLAN 999: Management** - Router management vlan.
 
-### DNS
+### Static Hosts
 
-I have a file named `dns_records.yaml` where all my static DNS entries are stored. This file contains a local variable with a list of hostnames, IP addresses, and DNS types. Here is an example of what it looks like:
+I have a file called `_static_hosts.yaml` which contains all my static DNS records and DHCP leases. This file contains a local variable with a list of hostnames, IP addresses, DNS types and mac addresses. Here is an example of what it looks like:
 
 ```yaml
-dns_records:
+static_hosts:
   - hostname: "device1.home"
     ip: "192.168.1.10"
     type: "A"
   - hostname: "device2.home"
     ip: "192.168.1.11"
-    type: "A" 
+    type: "A"
+    mac: "01:2A:4B:CC:1E:2A"
 ```
 
-The `dns_records.yaml` file is excluded in the .gitignore to avoid exposing too much of my network (refer to the Risks section).
-This is the reason why is manually created after cloning the repository.
+The `_static_hosts.yaml` file is excluded in the `.gitignore` to avoid exposing too much of my network (refer to the Risks section). This is the reason why is manually created after cloning the repository.
 
 ### WiFi
 
@@ -142,6 +142,17 @@ system/device-mode/update mode=enterprise container=yes
 ```
 
 The `container` package will be installed with Terraform, but an additional manual reboot is needed.
+
+### Images
+
+The Mikrotik container feature has no way of keeping images up to date, so I wrote my own script [mikrotik-updatecontainerimage](https://gist.github.com/Schwitzd/517b5ba2add1bcad9528dd5f37e0fdaf#file-mikrotik-updatecontainerimage) and scheduled it to run once a week. What it does:
+
+1. Read container patameters
+1. Stop and delete existing container
+1. Create a new container with the same parameters
+1. Restart the container
+
+Useless to tell you why it is important to keep images up to date!
 
 ## Security
 
