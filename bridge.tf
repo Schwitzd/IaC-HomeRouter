@@ -1,6 +1,5 @@
 ## Bridge - Locals
 locals {
-
   bridges = {
     bridge = {
       name           = "bridge"
@@ -20,7 +19,7 @@ locals {
     ether1 = {
       bridge    = local.bridges.bridge.name
       interface = "ether1"
-      pvid      = 1
+      pvid      = 300
     }
     ether2 = {
       bridge    = local.bridges.bridge.name
