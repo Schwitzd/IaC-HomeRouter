@@ -79,6 +79,15 @@ locals {
       out_interface_list = "VLANs"
     }
     role12 = {
+      action        = "accept"
+      chain         = "forward"
+      comment       = "Allow SSH traffic from myhome"
+      protocol = "tcp"
+      dst_port      = "22"
+      in_interface  = routeros_interface_vlan.vlans["myhome"].name
+      out_interface = routeros_interface_vlan.vlans["myserver"].name
+    }
+    role13 = {
       action             = "drop"
       chain              = "forward"
       comment            = "Block all traffics between VLANs"
@@ -109,6 +118,9 @@ resource "routeros_ip_firewall_filter" "firewall_rules" {
   connection_state     = lookup(each.value, "connection_state", null)
   connection_nat_state = lookup(each.value, "connection_nat_state", null)
   dst_address          = lookup(each.value, "dst_address", null)
+  dst_port             = lookup(each.value, "dst_port", null)
+  in_interface         = lookup(each.value, "in_interface", null)
+  out_interface        = lookup(each.value, "out_interface", null)
   in_interface_list    = lookup(each.value, "in_interface_list", null)
   out_interface_list   = lookup(each.value, "out_interface_list", null)
   ipsec_policy         = lookup(each.value, "ipsec_policy", null)
