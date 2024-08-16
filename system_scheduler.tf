@@ -4,7 +4,7 @@ locals {
     update_container_image = {
       on_event   = local.scripts.update_container_image.name
       interval   = "1w"
-      start_date = "aug/18/2024"
+      start_date = "2024-08-18"
       start_time = "09:00:00"
       policy     = ["read", "write", "policy"]
     }

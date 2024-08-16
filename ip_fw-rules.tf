@@ -71,7 +71,6 @@ locals {
       in_interface_list    = "WAN"
     }
     role11 = {
-      disabled           = true
       action             = "accept"
       chain              = "forward"
       comment            = "Accept IGMP traffic between VLANs"
