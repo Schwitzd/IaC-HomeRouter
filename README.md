@@ -172,7 +172,28 @@ For a reason I have not yet understood Alpine Linux is not able to resolve `rout
 
 ### Firewall
 
-I'm leveraging the built-in MikroTik firewall to protect each VLAN. By default, there is a rule that blocks all traffic between VLANs. Only explicitly allowed traffic is permitted to pass through the firewall.
+I'm using the built-in MikroTik firewall to protect each VLAN, ensuring that only authorized traffic flows through the network. By default, the firewall is configured with a rule that blocks all traffic between VLANs, creating an isolated environment for each VLAN. This setup ensures that no cross-VLAN communication occurs unless explicitly permitted by additional rules.
+
+To manage traffic more efficiently, I'm leveraging the **Address Lists** feature in MikroTik. This allows me to dynamically add IP addresses to my firewall rules, making the rules more flexible and easier to manage. For example, I maintain a YAML file named _fw_addr_lists.yaml that contains all the IP addresses needed to build the rules. This file allows me to organize and update my firewall rules without modifying the main configuration directly. Here's an example of how this file is structured:
+
+```yaml
+fw_addr_lists:
+  - list: "example-list"
+    address: "192.168.88.1"
+```
+
+In addition to address lists, I manage all my firewall rules in another YAML file, _fw_rules.yaml. This file contains the definitions for all the rules applied to the firewall, specifying which traffic is allowed or denied across the network. By keeping these rules in a YAML file, I can easily adjust the firewall settings in a centralized manner, ensuring consistency and simplicity in my network configuration.
+
+Here’s an example of how a rule might look in the `_fw_rules.yaml` file:
+
+```yaml
+  role14:
+    action: "drop"
+    chain: "forward"
+    comment: "Block all traffics between VLANs"
+    in_interface_list: "VLANs"
+    out_interface_list: "VLANs"
+```
 
 ### Backup
 
@@ -190,4 +211,3 @@ I decided to share this repository because I believe that sharing knowledge is i
 
 * Disable IPSec
 * Remove IPSec fw rules
-* WiFi force PMF
