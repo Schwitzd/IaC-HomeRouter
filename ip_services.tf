@@ -5,7 +5,7 @@ locals {
     "telnet"  = { port = 23, disabled = true  }
     "winbox"  = { port = 8291, disabled = true }
     "api"     = { port = 8728, disabled = true }
-    "api-ssl" = { port = 8729, disabled = true }
+    "api-ssl" = { port = 8729, disabled = false }
     "www"     = { port = 80, disabled = true  }
     "ssh"     = { port = 22, disabled = false }
     "www-ssl" = { port = 443, disabled = false }
