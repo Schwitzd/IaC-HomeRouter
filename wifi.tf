@@ -14,7 +14,7 @@ locals {
       name                  = "wifi-myhome"
       passphrase_key        = data.vault_generic_secret.wifi.data["myhome"]
       authentication_types  = "wpa2-psk,wpa3-psk"
-      management_encryption = "gmac"
+      management_encryption = "cmac"
       management_protection = "required"
     }
     myiot = {
@@ -63,7 +63,7 @@ resource "routeros_wifi" "network_wifi" {
     ft                    = "true"
     ft_over_ds            = "true"
     passphrase            = each.value.passphrase_key
-    management-encryption = each.value.management_encryption
+    management_encryption = each.value.management_encryption
     management_protection = each.value.management_protection
     wps                   = "disable"
   }
