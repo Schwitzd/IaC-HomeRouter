@@ -40,7 +40,6 @@ locals {
       bridge         = local.bridges.bridge.name
       addr_interface = "vlan-myserver"
       vlan_id        = 300
-      #      vlan_interfaces  = null
     }
     mycontainer = {
       name           = "mycontainer"

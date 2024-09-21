@@ -31,3 +31,9 @@ resource "routeros_ip_dns_record" "dns_records" {
   type    = each.value.type
 
 }
+
+# DNS - Adlist
+resource "routeros_dns_adlist" "dns_adlist" {
+  url        = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+  ssl_verify = true
+}
