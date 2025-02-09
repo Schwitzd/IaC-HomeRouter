@@ -209,5 +209,6 @@ I decided to share this repository because I believe that sharing knowledge is i
 
 ## To Do
 
+* Enhance the readme with the structure of _locals-generics.tf
 * Disable IPSec
 * Remove IPSec fw rules

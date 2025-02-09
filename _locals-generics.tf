@@ -5,6 +5,9 @@ locals {
   system_architecture = data.routeros_system_resource.data.architecture_name
 
   # Define static network configurations
+  ipv6_ula_prefix = "fd12:3456:789a"
+
+  # Define static network configurations
   networks_static = {
     myhome = {
       name            = "myhome"
@@ -17,6 +20,9 @@ locals {
       addr_interface  = "vlan-myhome"
       vlan_id         = 100
       vlan_interfaces = ["wifi-myhome"]
+      ipv6_network    = "${local.ipv6_ula_prefix}:12::"
+      ipv6_mask       = "64"
+
     }
     myiot = {
       name            = "myiot"
@@ -40,6 +46,9 @@ locals {
       bridge         = local.bridges.bridge.name
       addr_interface = "vlan-myserver"
       vlan_id        = 300
+      ipv6_network   = "${local.ipv6_ula_prefix}:14::"
+      ipv6_mask      = "64"
+
     }
     mycontainer = {
       name           = "mycontainer"
@@ -77,6 +86,8 @@ locals {
       network        = network_value.network
       vlan_id        = lookup(network_value, "vlan_id", null)
       vlan_interface = concat([network_value.bridge], lookup(network_value, "vlan_interfaces", []))
+      ipv6_network   = lookup(network_value, "ipv6_network", null)
+      ipv6_mask      = lookup(network_value, "ipv6_mask", null)
     }
   }
 }
