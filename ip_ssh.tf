@@ -12,6 +12,11 @@ resource "routeros_file" "ssh_publickey_admin" {
   contents = module.sshkey_admin.public_key
 }
 
+#resource "routeros_system_user_sshkeys" "publickey_admin" {
+#  user    = local.router_user
+#  key     = routeros_file.ssh_publickey_admin.contents
+#}
+
 resource "null_resource" "import_publickey_admin" {
   provisioner "local-exec" {
     command = <<EOT
@@ -31,14 +36,14 @@ module "sshkey_lego" {
   write_to_file = false
 }
 
-resource "routeros_file" "ssh_publickey_lego" {
-  name     = "container_lego.pub"
-  contents = module.sshkey_lego.public_key
-}
-
 resource "routeros_file" "ssh_privatekey_lego" {
   name     = "${local.containers_path}/lego/ssh/id_ed25519"
   contents = module.sshkey_lego.private_key
+}
+
+resource "routeros_system_user_sshkeys" "publickey_lego" {
+  user    = local.users_data.lego.user
+  key     = routeros_file.ssh_publickey_lego.contents
 }
 
 resource "null_resource" "import_publickey_lego" {

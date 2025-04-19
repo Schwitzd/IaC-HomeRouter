@@ -18,6 +18,8 @@ resource "routeros_dns" "dns-server" {
   use_doh_server  = "https://dns.quad9.net/dns-query"
   verify_doh_cert = true
 
+  mdns_repeat_ifaces = ["vlan-myhome", "vlan-myiot"]
+
   depends_on = [routeros_system_certificate.quad9_root]
 }
 

@@ -35,6 +35,8 @@ locals {
       addr_interface  = "vlan-myiot"
       vlan_id         = 200
       vlan_interfaces = ["wifi-myiot"]
+      ipv6_network    = "${local.ipv6_ula_prefix}:13::"
+      ipv6_mask       = "64"
     }
     myserver = {
       name           = "myserver"

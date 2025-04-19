@@ -37,7 +37,7 @@ resource "routeros_container_mounts" "lego_mounts" {
 
 # Container lego - Image
 resource "routeros_container" "lego" {
-  remote_image  = "schwitzd/routeros-letsencrypt"
+  remote_image  = "schwitzd/routeros-letsencrypt:latest"
   interface     = local.veth_interfaces.mycontainer.name
   comment       = "lego"
   envlist       = "lego"
