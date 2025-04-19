@@ -39,7 +39,7 @@ locals {
     ether5 = {
       bridge    = local.bridges.bridge.name
       interface = "ether5"
-      pvid      = 1
+      pvid      = 300
     }
     wifi1 = {
       bridge    = local.bridges.bridge.name
