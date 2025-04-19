@@ -4,7 +4,7 @@ locals {
     myhome = {
       arp_timeout           = "auto"
       band                  = "5ghz-ax"
-      frequency             = "5490-5710"
+      frequency             = "5500-5560"
       reselect_interval     = "1h"
       secondary_frequency   = "disabled"
       width                 = "20/40/80mhz"
