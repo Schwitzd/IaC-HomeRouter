@@ -43,15 +43,5 @@ resource "routeros_file" "ssh_privatekey_lego" {
 
 resource "routeros_system_user_sshkeys" "publickey_lego" {
   user    = local.users_data.lego.user
-  key     = routeros_file.ssh_publickey_lego.contents
-}
-
-resource "null_resource" "import_publickey_lego" {
-  provisioner "local-exec" {
-    command = <<EOT
-        ssh ${local.router_user}@${local.router_hostname} '/user/ssh-keys import user=${local.users_data.lego.user} public-key-file=${routeros_file.ssh_publickey_lego.name} key-owner=${local.users_data.lego.user}'
-      EOT
-  }
-
-  depends_on = [routeros_file.ssh_publickey_lego, routeros_system_user.users["lego"]]
+  key     = module.sshkey_lego.public_key
 }
