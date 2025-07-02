@@ -16,7 +16,7 @@ I decided to configure my MikroTik router with Terraform for several reasons:
 
 1. **Configuration Tracking**: With Terraform, I can easily track changes to my router's configuration. In addition to reading changelogs, I can discover every single setting that is altered after an upgrade process, ensuring that I maintain full control and visibility over my router settings.
 
-1. ~~**Backup**: Using Terraform~provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation.~~
+1. ~~**Backup**: Using Terraform provides a creative alternative to traditional backup methods for my router. By storing my router's configuration as code, I can quickly and reliably restore my settings if needed, leveraging the benefits of version control and automation.~~
 
 ## Getting Started
 
@@ -197,7 +197,14 @@ Here’s an example of how a rule might look in the `_fw_rules.yaml` file:
 
 ### Backup
 
-offline backup TBD
+I will set up automated, weekly backups using [docker-routeros-backup](https://github.com/Schwitzd/docker-routeros-backup), a container image I’ve developed. This process is orchestrated using Kubernetes CronJobs for scheduled execution. The container performs the following tasks:
+
+1. Connects to the MikroTik router via SSH  
+2. Executes an encrypted backup and saves it on the router as a binary file  
+3. Retrieves the backup file from the router using SCP  
+4. Uploads the backup to my local MinIO instance, which is S3-compatible  
+
+Additionally, I will implement backup retention by keeping only the five most recent backup files.
 
 ## Risks
 

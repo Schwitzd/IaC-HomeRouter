@@ -10,7 +10,7 @@ locals {
       allowed_address = "${local.networks_static.mycontainer.network}/${local.networks_static.mycontainer.mask}"
       group           = "lego"
       comment         = "Used to rotate letsencrypt certificate"
-      policy          = ["!api", "!ftp", "!local", "!password", "!policy", "read", "!reboot", "!rest-api", "!romon", "!sensitive", "!sniff", "ssh", "!telnet", "!test", "!web", "!winbox", "write"]
+      policy          = ["!api", "ftp", "!local", "!password", "!policy", "read", "!reboot", "!rest-api", "!romon", "!sensitive", "!sniff", "ssh", "!telnet", "!test", "!web", "!winbox", "write"]
     },
     mktxp = {
       user            = data.vault_generic_secret.mikrotik.data["user_mktxp"]
@@ -26,7 +26,7 @@ locals {
       allowed_address = "${local.networks_static.myserver.network}/${local.networks_static.myserver.mask}"
       group           = "backup"
       comment         = "Used to create MikroTik backups"
-      policy          = ["!api", "!ftp", "!local", "!password", "!policy", "read", "!reboot", "!rest-api", "!romon", "sensitive", "!sniff", "!ssh", "!telnet", "!test", "!web", "!winbox", "write"]
+      policy          = ["!api", "ftp", "!local", "!password", "policy", "read", "!reboot", "!rest-api", "!romon", "!sensitive", "!sniff", "ssh", "!telnet", "test", "!web", "!winbox", "write"]
     }
   }
 }
