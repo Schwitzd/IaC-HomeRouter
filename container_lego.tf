@@ -18,7 +18,7 @@ locals {
 }
 
 # Container lego - Envs
-resource "routeros_container_envs" "lego_envs" {
+resource "routeros_container_envs" "lego" {
   for_each = nonsensitive(local.lego_envs)
 
   name  = "lego"
@@ -27,7 +27,7 @@ resource "routeros_container_envs" "lego_envs" {
 }
 
 # Container lego - Mounts
-resource "routeros_container_mounts" "lego_mounts" {
+resource "routeros_container_mounts" "lego" {
   for_each = local.lego_mounts
 
   name = each.key
@@ -43,9 +43,12 @@ resource "routeros_container" "lego" {
   envlist       = "lego"
   dns           = local.networks_static.mycontainer.dns_server
   logging       = true
-  mounts        = [for mount in routeros_container_mounts.lego_mounts : mount.name]
+  mounts        = [for mount in routeros_container_mounts.lego : mount.name]
   root_dir      = "${local.containers_path}/lego/root"
   start_on_boot = true
 
-  depends_on = [routeros_container_mounts.lego_mounts, routeros_container_envs.lego_envs]
+  depends_on = [
+    routeros_container_mounts.lego,
+     routeros_container_envs.lego
+    ]
 }

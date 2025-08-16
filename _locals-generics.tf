@@ -63,10 +63,25 @@ locals {
       addr_interface = local.bridges.container.name
       vlan_id        = null
     }
+    myvpn = {
+      name           = "myvpn"
+      network        = "192.168.199.0"
+      mask           = "29"
+      gateway        = "192.168.199.1"
+      dhcp_enabled   = false
+      dns_server     = "192.168.199.1"
+      bridge         = null
+      addr_interface = "wireguard1"
+      vlan_id        = null
+    }
   }
 
-  # Read DNS & DHCP records from YAML file
+  # Read DNS & DHCP records
   static_hosts = yamldecode(file("${path.module}/_static_hosts.yaml"))["static_hosts"]
+
+  # Read Wireguard peers
+  wireguard_peers      = yamldecode(file("${path.module}/_wireguard.yaml")).wireguard.peers
+  wireguard_interfaces = yamldecode(file("${path.module}/_wireguard.yaml")).wireguard.interfaces
 
   # SSH Locals
   router_ssh_key = module.sshkey_admin.public_key_filename
@@ -75,7 +90,7 @@ locals {
   networks = {
     for network_key, network_value in local.networks_static : network_key => {
       address        = "${network_value.gateway}/${network_value.mask}"
-      bridge         = network_value.bridge
+      bridge         = lookup(network_value, "bridge", [])
       gateway        = network_value.gateway
       interface      = network_value.addr_interface
       dhcp_enabled   = network_value.dhcp_enabled

@@ -57,3 +57,5 @@ terraform.rc
 _static_hosts.yaml
 _fw_addr_lists.yaml
 _fw_roles.yaml
+_fw_roles_v6.yaml
+_wireguard.yaml

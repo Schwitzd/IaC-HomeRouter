@@ -24,3 +24,13 @@ variable "usb_disk" {
   description = "UBS disk path"
   type        = string
 }
+
+variable "mikrotik_public_ipv6" {
+  description = "Temporary public IPv6 Mikrotik address"
+  type        = string
+}
+
+variable "wiregard_public_ipv6" {
+  description = "Temporary public IPv6 Home tunnel address"
+  type        = string
+}

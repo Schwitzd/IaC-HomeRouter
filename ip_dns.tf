@@ -15,10 +15,10 @@ resource "routeros_dns" "dns-server" {
     "9.9.9.9",
     "149.112.112.112",
   ]
-  use_doh_server  = "https://dns.quad9.net/dns-query"
-  verify_doh_cert = true
+  # use_doh_server  = "https://dns.quad9.net/dns-query"
+  # verify_doh_cert = true
 
-  mdns_repeat_ifaces = ["vlan-myhome", "vlan-myiot"]
+  mdns_repeat_ifaces = ["vlan-myhome", "vlan-myiot", "wireguard0"]
 
   depends_on = [routeros_system_certificate.quad9_root]
 }
