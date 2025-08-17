@@ -1,19 +1,8 @@
 # Firewall Rules - Locals
 locals {
   # Firewall addresses list
-  #fw_addr_lists = yamldecode(file("${path.module}/_fw_addr_lists.yaml"))["fw_addr_lists"]
-
-  # Firewall addresses list
   fw_rules_v6 = yamldecode(file("${path.module}/_fw_roles_v6.yaml"))["fw_roles"]
 }
-
-## Firewall - Address Lists
-#resource "routeros_ip_firewall_addr_list" "address_lists" {
-#  for_each = { for record in local.fw_addr_lists : record.list => record }
-#
-#  address = each.value.address
-#  list    = each.value.list
-#}
 
 ## Firewall - Rules
 resource "routeros_ipv6_firewall_filter" "firewall_rules" {

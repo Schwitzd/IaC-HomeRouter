@@ -1,4 +1,28 @@
 locals {
+# Build a flat map of all IPv6 interface addresses (ULA + GUA)
+  ipv6_networks = merge(
+    {
+      for k, v in local.networks :
+      "${k}-ula" => {
+        interface = v.interface
+        address   = "${v.ipv6.ula.prefix64}1/${v.ipv6.ula.mask}"
+        advertise = lookup(v.ipv6.ula, "advertise", true)
+        comment   = "${k} - ULA"
+      }
+      if try(v.ipv6.ula.prefix64, null) != null
+    },
+    {
+      for k, v in local.networks :
+      "${k}-gua" => {
+        interface = v.interface
+        address   = "${v.ipv6.gua.prefix64}1/${v.ipv6.gua.mask}"
+        advertise = lookup(v.ipv6.gua, "advertise", true)
+        comment   = "${k} - GUA"
+      }
+      if try(v.ipv6.gua.prefix64, null) != null
+    }
+  )
+
   ipv6_addresses = {
     route64 = {
       address   = var.mikrotik_public_ipv6
@@ -13,16 +37,24 @@ locals {
       advertise = false
     }
   }
+
+  ipv6_routes = {
+    default_route64 = {
+      dst_address = "2000::/3"
+      gateway     = "wireguard0"
+      comment     = "GUA via Route64"
+    }
+  }
 }
 
 # IPv6 Addresses
 resource "routeros_ipv6_address" "networks" {
-  for_each = { for k, v in local.networks : k => v if v.ipv6_network != null }
+  for_each  = local.ipv6_networks
 
-  address   = "${each.value.ipv6_network}1/${each.value.ipv6_mask}"
-  comment   = each.key
   interface = each.value.interface
-  advertise = true
+  address   = each.value.address
+  advertise = each.value.advertise
+  comment   = each.value.comment
 
   depends_on = [routeros_interface_vlan.vlans]
 }
@@ -37,18 +69,11 @@ resource "routeros_ipv6_address" "singles" {
   advertise = each.value.advertise
 }
 
-# IPv6 Router Advertisements (RA) with RDNSS for DNS
-resource "routeros_ipv6_neighbor_discovery" "slaac" {
-  for_each = { for k, v in local.networks : k => v if v.ipv6_network != null }
+# IPv6 routes
+resource "routeros_ipv6_route" "routes" {
+  for_each   = local.ipv6_routes
 
-  interface                     = each.value.interface
-  advertise_dns                 = true # Enables RDNSS for DNS advertisement
-  advertise_mac_address         = true
-  dns                           = "${each.value.ipv6_network}1"
-  disabled                      = false
-  managed_address_configuration = false # No DHCPv6, pure SLAAC
-  mtu                           = 1500
-  other_configuration           = true # Allows RDNSS
-  ra_delay                      = "3s"
-  ra_preference                 = "medium"
+  dst_address = each.value.dst_address
+  gateway     = each.value.gateway
+  comment     = each.value.comment
 }

@@ -6,6 +6,7 @@ locals {
 
   # Define static network configurations
   ipv6_ula_prefix = "fd12:3456:789a"
+  ipv6_gua_prefix = var.route64_gua_subnet
 
   # Define static network configurations
   networks_static = {
@@ -20,8 +21,19 @@ locals {
       addr_interface  = "vlan-myhome"
       vlan_id         = 100
       vlan_interfaces = ["wifi-myhome"]
-      ipv6_network    = "${local.ipv6_ula_prefix}:12::"
-      ipv6_mask       = "64"
+      ipv6 = {
+        ula = {
+          prefix64  = "${local.ipv6_ula_prefix}:12::"
+          mask      = 64
+          advertise = true
+        }
+        gua = {
+          prefix64  = "${local.ipv6_gua_prefix}:0::"
+          mask      = 64
+          advertise = true
+          mtu       = 1420
+        }
+      }
 
     }
     myiot = {
@@ -35,8 +47,13 @@ locals {
       addr_interface  = "vlan-myiot"
       vlan_id         = 200
       vlan_interfaces = ["wifi-myiot"]
-      ipv6_network    = "${local.ipv6_ula_prefix}:13::"
-      ipv6_mask       = "64"
+      ipv6 = {
+        ula = {
+          prefix64  = "${local.ipv6_ula_prefix}:13::"
+          mask      = 64
+          advertise = true
+        }
+      }
     }
     myserver = {
       name           = "myserver"
@@ -48,9 +65,13 @@ locals {
       bridge         = local.bridges.bridge.name
       addr_interface = "vlan-myserver"
       vlan_id        = 300
-      ipv6_network   = "${local.ipv6_ula_prefix}:14::"
-      ipv6_mask      = "64"
-
+      ipv6 = {
+        ula = {
+          prefix64  = "${local.ipv6_ula_prefix}:14::"
+          mask      = 64
+          advertise = true
+        }
+      }
     }
     mycontainer = {
       name           = "mycontainer"
@@ -103,8 +124,7 @@ locals {
       network        = network_value.network
       vlan_id        = lookup(network_value, "vlan_id", null)
       vlan_interface = concat([network_value.bridge], lookup(network_value, "vlan_interfaces", []))
-      ipv6_network   = lookup(network_value, "ipv6_network", null)
-      ipv6_mask      = lookup(network_value, "ipv6_mask", null)
+      ipv6           = lookup(network_value, "ipv6", null)
     }
   }
 }

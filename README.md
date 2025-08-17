@@ -134,6 +134,8 @@ static_hosts:
 
 The `_static_hosts.yaml` file is excluded in the `.gitignore` to avoid exposing too much of my network (refer to the Risks section). This is the reason why is manually created after cloning the repository.
 
+### IPv6
+
 ### WiFi
 
 I have two WiFi networks set up:

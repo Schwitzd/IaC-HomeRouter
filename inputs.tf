@@ -34,3 +34,8 @@ variable "wiregard_public_ipv6" {
   description = "Temporary public IPv6 Home tunnel address"
   type        = string
 }
+
+variable "route64_gua_subnet" {
+  description = "Route64 GUA subnet"
+  type        = string
+}
