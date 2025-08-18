@@ -136,6 +136,19 @@ The `_static_hosts.yaml` file is excluded in the `.gitignore` to avoid exposing 
 
 ### IPv6
 
+As of today (August 2025) my [ISP](https://en.wikipedia.org/wiki/Internet_service_provider) currently is only offering IPv4 behind [CGNAT](https://en.wikipedia.org/wiki/Carrier-grade_NAT) for mobile devices. My router connects to the internet via [LTE](https://en.wikipedia.org/wiki/LTE_(telecommunication)). Sadly, [IPv6](https://en.wikipedia.org/wiki/IPv6) is only available for residential [xDSL](https://en.wikipedia.org/wiki/Digital_subscriber_line#DSL_technologies)/[FTTH](https://en.wikipedia.org/wiki/Fiber_to_the_x)
+
+While I wait for my [ISP](https://en.wikipedia.org/wiki/Internet_service_provider) to modernise its [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network) infrastructure to provide [IPv6 addresses](https://en.wikipedia.org/wiki/IPv6) I have decided to use [Route64](https://route64.org) which offers a free [tunnel broker](https://en.wikipedia.org/wiki/Tunnel_broker) service.
+
+Here's how it works at a high level:
+
+- My MikroTik router establishes a [WireGuard](https://www.wireguard.com/) tunnel to the nearest [Route64](https://route64.org) [PoP](https://en.wikipedia.org/wiki/Point_of_presence)  
+- Through this tunnel, the router is assigned a [/56 Global Unicast IPv6 prefix](https://ipcisco.com/lesson/ipv6-global-unicast-address/)  
+- From that /56, I can delegate /64 subnets to my internal VLANs
+- These public [IPv6 addresses](https://en.wikipedia.org/wiki/IPv6_address) are fully routable on the Internet  
+
+I have wrote a dedicated article on my blog to go deeper in the topic.
+
 ### WiFi
 
 I have two WiFi networks set up:
@@ -213,31 +226,27 @@ Here's an example of how a rule might look in the `_fw_rules.yaml` file:
 
 ### VPN
 
-Regarding the VPN, the situation is currently under investigation because, at the time of writing, my ISP is only offering IPv4 behind [CGNAT](https://en.wikipedia.org/wiki/Carrier-grade_NAT) for mobile devices. My router connects to the internet via LTE. Sadly, IPv6 is only available for residential [xDSL](https://en.wikipedia.org/wiki/Digital_subscriber_line#DSL_technologies)/[FTTH](https://en.wikipedia.org/wiki/Fiber_to_the_x)
+To connect to my Home network I'm using a [WireGuard](https://www.wireguard.com) tunnel. As I mentioned at the beginning, my [ISP](https://en.wikipedia.org/wiki/Internet_service_provider) only provides IPv4 behind [CGNAT](https://en.wikipedia.org/wiki/Carrier-grade_NAT). For this reason, I use a free [tunnel broker](https://en.wikipedia.org/wiki/Tunnel_broker) from [Route64](https://route64.org), which gives me a publicly routable [IPv6](https://en.wikipedia.org/wiki/IPv6) connection over the Internet that I use as a VPN endpoint.
 
-I'm bypassing [CGNAT](https://en.wikipedia.org/wiki/Carrier-grade_NAT) with the help of [Route64](https://route64.org) that is offering a free [tunnel broker](https://en.wikipedia.org/wiki/Tunnel_broker) service.
-
-- My MikroTik router establishes a [WireGuard](https://www.wireguard.com/) tunnel to the nearest [Route64](https://route64.org) [PoP](https://en.wikipedia.org/wiki/Point_of_presence).  
-- Through this tunnel, the router is assigned a [Global Unicast IPv6 address (GUA)](https://ipcisco.com/lesson/ipv6-global-unicast-address/).  
-- This public [IPv6 address](https://en.wikipedia.org/wiki/IPv6_address) is fully routable on the Internet, allowing my client devices to access my home cluster from abroad.  
+Here the VPN schema workflow:
 
 ```mermaid
 graph LR
-    LAN[Home<br/>Cluster] --> Mikrotik["<b>MikroTik<br/>Router</b>"]
+    LAN[Home<br/>Cluster] --> Mikrotik["<b>MikroTik<br/>Router</b>"]
 
-    subgraph Route64Box["Get IPv6 from <b>Route64<b>"]
-        direction LR
-        WGup["<b>WireGuard tunnel</b><br/>to Route64"]
-        Route64["Route64<br/>PoP"]
-        WGup --- Route64
-    end
+    subgraph Route64Box["Get IPv6 subnet from <b>Route64<b>"]
+        direction LR
+        WGup["<b>WireGuard tunnel</b><br/>to Route64"]
+        Route64["Route64<br/>PoP"]
+        WGup --- Route64
+    end
 
-    Mikrotik --- WGup
+    Mikrotik --- WGup
 
-    Client["<b>VPN</b><br/>WireGuard client"] --> Tunnel2["<b>VPN (IPv6)</b><br />Home Remote Access"] --- Mikrotik
-  ```
+    Client["<b>VPN</b><br/>WireGuard client"] --> Tunnel2["<b>VPN (IPv6)</b><br />Home Remote Access"] --- Mikrotik
+```
 
-As I said at the beginning, this configuration is still a work in progress, and I'm evaluating different scenarios. The major limitation is that the home VPN tunnel is only accessible via [IPv6](https://en.wikipedia.org/wiki/IPv6_address), but my mobile carrier (it seems none in Switzerland) does not provide [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on the [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network). This means that I cannot access my home cluster from my mobile phone. I'm stuck in a chicken-egg loop because, as soon as the ISP/carrier provides [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network), I won't need [Route64](https://route64.org) anymore.
+The major limitation is that the home VPN tunnel is only accessible via [IPv6](https://en.wikipedia.org/wiki/IPv6_address), but my mobile carrier (it seems none in Switzerland) does not provide [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on the [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network). This means that I cannot access my home cluster from my mobile phone. I'm stuck in a chicken-egg loop because, as soon as the ISP/carrier provides [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network), I won't need [Route64](https://route64.org) anymore.
 
 ### Backup
 
