@@ -6,12 +6,17 @@ resource "routeros_ipv6_neighbor_discovery" "slaac" {
     if try(v.ipv6, null) != null
   }
 
-  interface                     = each.value.interface
-  advertise_mac_address         = true # Enables RDNSS for DNS advertisement
-  advertise_dns                 = true
-  dns                           = "${try(each.value.ipv6.gua.prefix64, each.value.ipv6.ula.prefix64)}1"
+  interface             = each.value.interface
+  advertise_mac_address = true # Enables RDNSS for DNS advertisement
+  advertise_dns         = true
+  dns = join(",",
+    compact([
+      "${each.value.ipv6.ula.prefix64}1",
+      try("${each.value.ipv6.gua.prefix64}1", null)
+    ])
+  )
   managed_address_configuration = false # No DHCPv6, pure SLAAC
-  other_configuration           = true # Allows RDNSS
+  other_configuration           = true  # Allows RDNSS
   mtu                           = try(each.value.ipv6.gua.mtu, 1500)
   ra_delay                      = "3s"
   ra_preference                 = "medium"

@@ -1,6 +1,6 @@
 resource "routeros_ipv6_settings" "settings" {
     accept_redirects               = "yes-if-forwarding-disabled"
-    accept_router_advertisements   = "yes"
+    accept_router_advertisements   = "yes-if-forwarding-disabled"
     allow_fast_path                = true
     disable_ipv6                   = false
     disable_link_local_address     = false
