@@ -20,7 +20,7 @@ resource "routeros_dns" "dns-server" {
 
   mdns_repeat_ifaces = ["vlan-myhome", "vlan-myiot", "wireguard1"]
 
-  depends_on = [routeros_system_certificate.quad9_root]
+  depends_on = [routeros_system_certificate.ca]
 }
 
 # DNS - Static
