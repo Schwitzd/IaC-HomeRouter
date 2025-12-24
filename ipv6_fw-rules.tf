@@ -2,6 +2,7 @@
 locals {
   # Firewall addresses list
   fw_rules_v6 = yamldecode(file("${path.module}/_fw_roles_v6.yaml"))["fw_roles"]
+  fw_nat_v6 = yamldecode(file("${path.module}/_fw_nat_v6.yaml"))["fw_nat"]
 }
 
 ## Firewall - Rules
@@ -23,4 +24,22 @@ resource "routeros_ipv6_firewall_filter" "firewall_rules" {
   in_interface_list    = lookup(each.value, "in_interface_list", null)
   out_interface_list   = lookup(each.value, "out_interface_list", null)
   ipsec_policy         = lookup(each.value, "ipsec_policy", null)
+}
+
+## Firewall - Nat
+resource "routeros_ipv6_firewall_nat" "firewall_nat_rules" {
+  for_each = { for k, rule in local.fw_nat_v6 : k => rule }
+
+  disabled           = lookup(each.value, "disabled", null)
+  chain              = each.value.chain
+  action             = each.value.action
+  comment            = each.value.comment
+  out_interface      = lookup(each.value, "out_interface", null)
+  out_interface_list = lookup(each.value, "out_interface_list", null)
+  src_address        = lookup(each.value, "src_address", null)
+  src_address_list   = lookup(each.value, "src_address_list", null)
+  dst_address        = lookup(each.value, "dst_address", null)
+  dst_address_list   = lookup(each.value, "dst_address_list", null)
+  protocol           = lookup(each.value, "protocol", null)
+  dst_port           = lookup(each.value, "dst_port", null)
 }

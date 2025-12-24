@@ -36,6 +36,12 @@ locals {
       interface = routeros_interface_wireguard.interfaces["wireguard1"].name
       advertise = false
     }
+    wg1_router_ula = {
+      address   = "fd12:3456:789a:100::1/64"
+      comment   = "Wireguard1 inner ULA router address"
+      interface = routeros_interface_wireguard.interfaces["wireguard1"].name
+      advertise = false
+    }
   }
 
   ipv6_routes = {
@@ -43,6 +49,12 @@ locals {
       dst_address = "2000::/3"
       gateway     = "wireguard0"
       comment     = "GUA via Route64"
+    }
+    wg1_inner_ula = {
+      dst_address = "fd12:3456:789a:100::/64"
+      gateway     = "wireguard1"
+      comment     = "Inner wireguard1 network, used only by router (SNAT mode)"
+
     }
   }
 }

@@ -82,6 +82,7 @@ I structure the Vault different sections:
     touch _fw_roles.yaml
     touch _static_hosts.yaml
     touch _wireguard.yaml
+    touch _fw_nat_v6.yaml
     ```
 
 1. Initialize OpenTofu in your project directory:
@@ -232,21 +233,42 @@ Here the VPN schema workflow:
 
 ```mermaid
 graph LR
-    LAN[Home<br/>Cluster] --> Mikrotik["<b>MikroTik<br/>Router</b>"]
+    %% Internet side
+    subgraph Internet["Public Internet"]
+        Client["<b>VPN Clients</b><br/>Over wg1"]
+    end
 
-    subgraph Route64Box["Get IPv6 subnet from <b>Route64<b>"]
-        direction LR
-        WGup["<b>WireGuard tunnel</b><br/>to Route64"]
-        Route64["Route64<br/>PoP"]
-        WGup --- Route64
-    end
+    %% Home side
+    LAN[Home<br/>Cluster] --> MT["<b>MikroTik Router</b>"]
 
-    Mikrotik --- WGup
+    %% Underlay
+    subgraph Underlay["Get IPv6 subnet from <b>Route64<b>"]
+        direction LR
+        WG_R64["<b>WireGuard</b><br/>Route64 tunnel<br/>(wg0)"]
+        R64["Route64<br/>PoP"]
+        WG_R64 --- R64
+    end
 
-    Client["<b>VPN</b><br/>WireGuard client"] --> Tunnel2["<b>VPN (IPv6)</b><br />Home Remote Access"] --- Mikrotik
+    %% Overlay
+    subgraph Overlay["VPN (Home → VPS)"]
+        direction LR
+        WG_HOME["<b>WireGuard</b><br>VPS tunnel<br/>(wg1, SNAT)"]
+        VPS["<b>VPS</b><br/>Services"]
+        WG_HOME --- VPS
+    end
+
+    %% Links
+    Client -->|IPv6| MT
+    MT --- WG_R64
+    MT ---|SNAT| WG_HOME
 ```
 
-The major limitation is that the home VPN tunnel is only accessible via [IPv6](https://en.wikipedia.org/wiki/IPv6_address), but my mobile carrier (it seems none in Switzerland) does not provide [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on the [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network). This means that I cannot access my home cluster from my mobile phone. I'm stuck in a chicken-egg loop because, as soon as the ISP/carrier provides [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network), I won't need [Route64](https://route64.org) anymore.
+I'm using two WireGuard VPN tunnels:
+
+1. **wg0**: acts as the IPv6 uplink for the home network, delegating public IPv6 address space via Route64
+1. **wg1**: a private overlay used for secure access to internal services from mobile devices and for connecting the[farm cluster](https://github.com/Schwitzd/IaC-HomeK3s) to the VPS
+
+The major limitation is that the home VPN tunnel is only accessible via [IPv6](https://en.wikipedia.org/wiki/IPv6_address), but my mobile carrier (it seems none in Switzerland at time of writing) does not provide [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on the [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network). This means that I cannot access my home cluster from my mobile phone. I'm stuck in a chicken-egg loop because, as soon as the ISP/carrier provides [IPv6](https://en.wikipedia.org/wiki/IPv6_address) on [cellular network](https://en.m.wikipedia.org/wiki/Cellular_network), I won't need [Route64](https://route64.org) anymore.
 
 ### Backup
 

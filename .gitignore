@@ -55,3 +55,4 @@ _fw_addr_lists.yaml
 _fw_roles.yaml
 _fw_roles_v6.yaml
 _wireguard.yaml
+_fw_nat_v6.yaml
