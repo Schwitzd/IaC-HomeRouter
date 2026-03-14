@@ -83,6 +83,7 @@ I structure the Vault different sections:
     touch _static_hosts.yaml
     touch _wireguard.yaml
     touch _fw_nat_v6.yaml
+    touch _fw_addr_lists_v6.yaml
     ```
 
 1. Initialize OpenTofu in your project directory:
@@ -217,13 +218,16 @@ In addition to address lists, I manage all my firewall rules in another YAML fil
 Here's an example of how a rule might look in the `_fw_rules.yaml` file:
 
 ```yaml
-  role14:
-    action: "drop"
-    chain: "forward"
-    comment: "Block all traffics between VLANs"
-    in_interface_list: "VLANs"
-    out_interface_list: "VLANs"
+"270-fwd-block-route64-to-lan":
+   chain: forward
+   action: drop
+   comment: "Block Route64 -> LAN"
+   in_interface: wireguard0
+   connection_state: "new"
 ```
+
+> [!CAUTION]
+RouterOS firewall rules are order-sensitive, but when managed as individual OpenTofu resources their creation order is **not guaranteed**. At the moment there is **no reliable automated solution** in this setup to enforce rule ordering, so the final order must be **verified and adjusted manually on the router** when strict ordering is required.
 
 ### VPN
 
@@ -252,7 +256,7 @@ graph LR
     %% Overlay
     subgraph Overlay["VPN (Home → VPS)"]
         direction LR
-        WG_HOME["<b>WireGuard</b><br>VPS tunnel<br/>(wg1, SNAT)"]
+        WG_HOME["<b>WireGuard</b><br>VPS tunnel<br/>(wg1)"]
         VPS["<b>VPS</b><br/>Services"]
         WG_HOME --- VPS
     end
@@ -260,7 +264,7 @@ graph LR
     %% Links
     Client -->|IPv6| MT
     MT --- WG_R64
-    MT ---|SNAT| WG_HOME
+    MT --- WG_HOME
 ```
 
 I'm using two WireGuard VPN tunnels:

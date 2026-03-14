@@ -41,6 +41,7 @@ resource "routeros_container" "lego" {
   interface     = local.veth_interfaces.mycontainer.name
   comment       = "lego"
   envlist       = "lego"
+  entrypoint    = "/app/entrypoint.sh"
   dns           = local.networks_static.mycontainer.dns_server
   logging       = true
   mounts        = [for mount in routeros_container_mounts.lego : mount.name]
