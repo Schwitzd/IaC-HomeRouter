@@ -19,7 +19,7 @@ resource "routeros_container_envs" "cloudflared" {
 # Container cloudflared - Image
 resource "routeros_container" "cloudflared" {
   remote_image          = "cloudflare/cloudflared:latest"
-  interface             = local.veth_interfaces.mycontainer.name
+  interface             = routeros_interface_veth.cloudflared.name
   comment               = "cloudflared Tunnel"
   cmd                   = "tunnel --no-autoupdate run"
   envlist               = "cloudflared"

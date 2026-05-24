@@ -53,7 +53,12 @@ locals {
     }
     veth1 = {
       bridge    = local.bridges.container.name
-      interface = local.veth_interfaces.mycontainer.name
+      interface = routeros_interface_veth.lego.name
+      pvid      = 1
+    }
+    veth2 = {
+      bridge    = local.bridges.container.name
+      interface = routeros_interface_veth.cloudflared.name
       pvid      = 1
     }
   }

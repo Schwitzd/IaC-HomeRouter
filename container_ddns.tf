@@ -19,7 +19,7 @@
 ## Container cloudflare-ddns - Image
 #resource "routeros_container" "ddns" {
 #  remote_image  = "favonia/cloudflare-ddns:latest"
-#  interface     = local.veth_interfaces.mycontainer.name
+#  interface     = local.veth_interfaces.lego.name
 #  comment       = "Cloudflare ddns"
 #  user          = "1000:1000"
 #  envlist       = "ddns"
