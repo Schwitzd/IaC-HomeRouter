@@ -11,16 +11,16 @@ data "routeros_x509" "certs" {
 locals {
   ca_certs = {
     quad9_root = {
-      filename     = "digicert-global-root-g3.pem"
-      friendly     = "digicert-global-root-g3"
-      pem          = data.routeros_x509.certs["quad9_root"].pem
-      common_name  = data.routeros_x509.certs["quad9_root"].common_name
+      filename    = "digicert-global-root-g3.pem"
+      friendly    = "digicert-global-root-g3"
+      pem         = data.routeros_x509.certs["quad9_root"].pem
+      common_name = data.routeros_x509.certs["quad9_root"].common_name
     }
     amazon_m01 = {
-      filename     = "amazon-rsa-2048-m01.pem"
-      friendly     = "amazon-rsa-2048-m01"
-      pem          = data.routeros_x509.certs["amazon_m01"].pem
-      common_name  = data.routeros_x509.certs["amazon_m01"].common_name
+      filename    = "amazon-rsa-2048-m01.pem"
+      friendly    = "amazon-rsa-2048-m01"
+      pem         = data.routeros_x509.certs["amazon_m01"].pem
+      common_name = data.routeros_x509.certs["amazon_m01"].common_name
     }
   }
 }
@@ -46,10 +46,10 @@ resource "routeros_system_certificate" "ca" {
 
   lifecycle {
     create_before_destroy = true
-    replace_triggered_by = [routeros_file.ca[each.key].id]
+    replace_triggered_by  = [routeros_file.ca[each.key].id]
   }
 
-  depends_on = [ 
+  depends_on = [
     routeros_file.ca
-   ]
+  ]
 }

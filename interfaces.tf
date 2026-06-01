@@ -31,7 +31,7 @@ resource "routeros_interface_list_member" "lan-list_member" {
   interface = each.value
   list      = local.interface_lists.lan.name
 
-  depends_on = [ routeros_interface_list.interfaces ]
+  depends_on = [routeros_interface_list.interfaces]
 }
 
 resource "routeros_interface_list_member" "vlans-list_member" {
@@ -39,5 +39,5 @@ resource "routeros_interface_list_member" "vlans-list_member" {
   interface = each.value
   list      = local.interface_lists.vlans.name
 
-  depends_on = [ routeros_interface_list.interfaces ]
+  depends_on = [routeros_interface_list.interfaces]
 }

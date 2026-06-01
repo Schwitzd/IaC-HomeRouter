@@ -29,7 +29,7 @@ locals {
     ether3 = {
       bridge    = local.bridges.bridge.name
       interface = "ether3"
-      pvid      = 200 
+      pvid      = 200
     }
     ether4 = {
       bridge    = local.bridges.bridge.name

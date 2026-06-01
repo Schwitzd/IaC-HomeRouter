@@ -42,8 +42,8 @@ resource "routeros_file" "ssh_privatekey_lego" {
 }
 
 resource "routeros_system_user_sshkeys" "publickey_lego" {
-  user    = local.users_data.lego.user
-  key     = module.sshkey_lego.public_key
+  user = local.users_data.lego.user
+  key  = module.sshkey_lego.public_key
 }
 
 # SSH for backup user
@@ -56,6 +56,6 @@ module "sshkey_backup" {
 }
 
 resource "routeros_system_user_sshkeys" "publickey_backup" {
-  user    = local.users_data.backup.user
-  key     = module.sshkey_backup.public_key
+  user = local.users_data.backup.user
+  key  = module.sshkey_backup.public_key
 }

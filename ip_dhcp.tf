@@ -15,11 +15,12 @@ locals {
 resource "routeros_ip_dhcp_server" "dhcp_servers" {
   for_each = { for k, v in local.networks : k => v if v.dhcp_enabled }
 
-  address_pool = each.value.dhcp_pool
-  interface    = each.value.interface
-  lease_time   = "30m"
-  name         = each.value.dhcp_server
-  use_radius   = "no"
+  address_pool              = each.value.dhcp_pool
+  interface                 = each.value.interface
+  lease_time                = "30m"
+  name                      = each.value.dhcp_server
+  use_radius                = "no"
+  dynamic_lease_identifiers = "client-mac,client-id"
 
   depends_on = [routeros_interface_vlan.vlans, routeros_ip_address.ip_addresses]
 }

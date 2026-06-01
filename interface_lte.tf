@@ -13,13 +13,13 @@ resource "routeros_interface_lte" "lte" {
 
 # LTE APN
 resource "routeros_interface_lte_apn" "yallo" {
-    add_default_route      = true
-    apn                    = "internet"
-    authentication         = "none"
-    default_route_distance = 2
-    ip_type                = "auto"
-    ipv6_interface         = "bridge"
-    name                   = "default"
-    use_network_apn        = true
-    use_peer_dns           = true
+  add_default_route      = true
+  apn                    = "internet"
+  authentication         = "none"
+  default_route_distance = 2
+  ip_type                = "auto"
+  ipv6_interface         = "bridge"
+  name                   = "default"
+  use_network_apn        = true
+  use_peer_dns           = true
 }

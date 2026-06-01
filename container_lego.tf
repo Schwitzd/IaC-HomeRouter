@@ -50,6 +50,6 @@ resource "routeros_container" "lego" {
 
   depends_on = [
     routeros_container_mounts.lego,
-     routeros_container_envs.lego
-    ]
+    routeros_container_envs.lego
+  ]
 }

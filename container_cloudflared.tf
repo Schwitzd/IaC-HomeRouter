@@ -1,4 +1,4 @@
-# Container ddns - Locals
+# Container cloudflared - Locals
 locals {
   cloudflared_envs = { for k, v in data.vault_generic_secret.container_cloudflared_envs.data : k => {
     key   = k

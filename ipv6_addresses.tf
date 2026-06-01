@@ -1,5 +1,5 @@
 locals {
-# Build a flat map of all IPv6 interface addresses (ULA + GUA)
+  # Build a flat map of all IPv6 interface addresses (ULA + GUA)
   ipv6_networks = merge(
     {
       for k, v in local.networks :
@@ -50,18 +50,12 @@ locals {
       gateway     = "wireguard0"
       comment     = "GUA via Route64"
     }
-    wg1_inner_ula = {
-      dst_address = "fd12:3456:789a:100::/64"
-      gateway     = "wireguard1"
-      comment     = "Inner wireguard1 network, used only by router (SNAT mode)"
-
-    }
   }
 }
 
 # IPv6 Addresses
 resource "routeros_ipv6_address" "networks" {
-  for_each  = local.ipv6_networks
+  for_each = local.ipv6_networks
 
   interface = each.value.interface
   address   = each.value.address
@@ -73,7 +67,7 @@ resource "routeros_ipv6_address" "networks" {
 
 # Mikrotik temporary IPv6 address thrue Route64
 resource "routeros_ipv6_address" "singles" {
-  for_each  = local.ipv6_addresses
+  for_each = local.ipv6_addresses
 
   address   = each.value.address
   comment   = each.value.comment
@@ -83,7 +77,7 @@ resource "routeros_ipv6_address" "singles" {
 
 # IPv6 routes
 resource "routeros_ipv6_route" "routes" {
-  for_each   = local.ipv6_routes
+  for_each = local.ipv6_routes
 
   dst_address = each.value.dst_address
   gateway     = each.value.gateway

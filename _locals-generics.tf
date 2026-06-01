@@ -28,7 +28,7 @@ locals {
           advertise = true
         }
         gua = {
-          prefix64  = "${local.ipv6_gua_prefix}:0::"
+          prefix64  = "${local.ipv6_gua_prefix}::"
           mask      = 64
           advertise = true
           mtu       = 1420

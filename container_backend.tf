@@ -1,7 +1,7 @@
 # Containers - Locals
 locals {
   container_npk_name = "container-${local.system_version}-${local.system_architecture}.npk"
-  containers_path = "${var.usb_disk}/containers"
+  containers_path    = "${var.usb_disk}/containers"
 }
 
 # Containers - Install package
@@ -19,12 +19,12 @@ resource "null_resource" "upload_container_npk" {
     command = "scp -i ${local.router_ssh_key} \"/tmp/routeros_packages/${local.container_npk_name}\" ${local.router_user}@${local.router_hostname}:/${local.container_npk_name}"
   }
 
-  depends_on = [ null_resource.download_container_npk, null_resource.import_publickey_admin ]
+  depends_on = [null_resource.download_container_npk, null_resource.import_publickey_admin]
 }
 
 resource "null_resource" "install_container_npk" {
   provisioner "local-exec" {
-      command = <<EOT
+    command = <<EOT
         ssh -i ${local.router_ssh_key} ${local.router_user}@${local.router_hostname} '/system reboot'; sleep 3
         until ssh -i ${local.router_ssh_key} -o ConnectTimeout=2 ${local.router_user}@${local.router_hostname} ':put True' 2> /dev/null
         do
@@ -34,7 +34,7 @@ resource "null_resource" "install_container_npk" {
       EOT
   }
 
-  depends_on = [ null_resource.upload_container_npk, null_resource.import_publickey_admin ]
+  depends_on = [null_resource.upload_container_npk, null_resource.import_publickey_admin]
 }
 
 # Containers - config

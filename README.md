@@ -82,7 +82,6 @@ I structure the Vault different sections:
     touch _fw_roles.yaml
     touch _static_hosts.yaml
     touch _wireguard.yaml
-    touch _fw_nat_v6.yaml
     touch _fw_addr_lists_v6.yaml
     ```
 
@@ -176,14 +175,7 @@ The `container` package will be installed with OpenTofu, but an additional manua
 
 ### Images
 
-The Mikrotik container feature has no way of keeping images up to date, so I wrote my own script [mikrotik-updatecontainerimage](https://gist.github.com/Schwitzd/517b5ba2add1bcad9528dd5f37e0fdaf#file-mikrotik-updatecontainerimage) and scheduled it to run once a week. What it does:
-
-1. Read container patameters
-1. Stop and delete existing container
-1. Create a new container with the same parameters
-1. Restart the container
-
-Useless to tell you why it is important to keep images up to date!
+To simplify container maintenance, I wrote a script called [mikrotik-updatecontainerimage](https://gist.github.com/Schwitzd/517b5ba2add1bcad9528dd5f37e0fdaf#file-mikrotik-updatecontainerimage). It automates the update process by leveraging the /container repull` command introduced in RouterOS v7.22.
 
 ## Security
 
