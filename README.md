@@ -175,7 +175,7 @@ The `container` package will be installed with OpenTofu, but an additional manua
 
 ### Images
 
-To simplify container maintenance, I wrote a script called [mikrotik-updatecontainerimage](https://gist.github.com/Schwitzd/517b5ba2add1bcad9528dd5f37e0fdaf#file-mikrotik-updatecontainerimage). It automates the update process by leveraging the /container repull` command introduced in RouterOS v7.22.
+To simplify container maintenance, I wrote a script called [mikrotik-updatecontainerimage](https://gist.github.com/Schwitzd/517b5ba2add1bcad9528dd5f37e0fdaf#file-mikrotik-updatecontainerimage). It automates the update process by leveraging the `container repull` command introduced in [RouterOS v7.22](https://forum.mikrotik.com/t/v7-22-stable-is-released/269092).
 
 ## Security
 
@@ -192,6 +192,18 @@ To avoid this, I took advantage of the domain I use for my [website](https://sch
 1. Use [routeros-letsencrypt-docker](https://github.com/Schwitzd/routeros-letsencrypt-docker) to obtain a Let's Encrypt certificate using [DNS challenge](https://letsencrypt.org/docs/challenge-types/).
 
 For a reason I have not yet understood Alpine Linux is not able to resolve `router.domain.tld` even having set the router as DNS resolver. So in the `ROUTEROS_HOST` environment variable I used the IP.
+
+### DNS over HTTPS (DoH) & Adlist
+
+To encrypt upstream DNS traffic and block malware, ads or trackers network-wide, I implemented DNS over HTTPS (DoH) using [Quad9](https://dns.quad9.net/dns-query) alongside the community [StevenBlack hosts blocklist](https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts).
+
+> [!NOTE]
+Since [Quad9 retired HTTP/1.1 support](https://quad9.net/news/blog/doh-http-1-1-retirement/), your router must run at least [RouterOS v7.23](https://forum.mikrotik.com/t/v7-23-stable-is-released/270721), which finally introduced the mandatory HTTP/2 support for DoH.
+
+Getting this running smoothly in RouterOS requires setting up static bootstrap IPs and importing the correct root certificates so the router can securely talk to the endpoint. The exact mechanics for this setup are covered in the [official MikroTik DoH Documentation](https://manual.mikrotik.com/docs/network-management/dns#dns-over-https-doh).
+
+> [!CAUTION]
+When configuring DoH on RouterOS, containers using musl (like Alpine Linux) might completely lose DNS resolution. This happens because RouterOS changes how it handles local DNS forwarding once DoH is active, which breaks the container's ability to resolve names through the default gateway. The fix is to explicitly define a DNS server within the container's configuration.
 
 ### Firewall
 
